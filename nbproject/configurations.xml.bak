@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="95">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>BMVisor.h</itemPath>
+      <itemPath>guest.h</itemPath>
+      <itemPath>host.h</itemPath>
+      <itemPath>pmode.h</itemPath>
+      <itemPath>pmode_screen.h</itemPath>
+      <itemPath>types.h</itemPath>
+      <itemPath>utility.h</itemPath>
+      <itemPath>visor_main.h</itemPath>
+      <itemPath>vmcb.h</itemPath>
+      <itemPath>x86.h</itemPath>
+      <itemPath>x86_architecture.h</itemPath>
+      <itemPath>xen_types.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>guest.c</itemPath>
+      <itemPath>host.c</itemPath>
+      <itemPath>pmode.c</itemPath>
+      <itemPath>pmode_screen.c</itemPath>
+      <itemPath>utility.c</itemPath>
+      <itemPath>visor_main.c</itemPath>
+      <itemPath>x86.c</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+    <itemPath>isr_wrapper.asm</itemPath>
+    <itemPath>isr_wrapper.h</itemPath>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <architecture>1</architecture>
+          <commandLine>-O0 -ffreestanding -D__BOOT_FROM_HD__ -D __GCC__ -Wall -masm=intel -c</commandLine>
+        </cTool>
+        <ccTool>
+          <architecture>1</architecture>
+        </ccTool>
+        <linkerTool>
+          <commandlineTool>ld</commandlineTool>
+          <commandLine>-Map=visor.map --cref -T visor.ld --oformat binary</commandLine>
+        </linkerTool>
+      </compileType>
+      <item path="BMVisor.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="guest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="guest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="host.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="host.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="isr_wrapper.asm" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="isr_wrapper.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="pmode.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="pmode.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="pmode_screen.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="pmode_screen.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="types.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="utility.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="utility.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="visor_main.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="visor_main.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="vmcb.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="x86.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="x86.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="x86_architecture.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="xen_types.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+          <architecture>1</architecture>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+      </compileType>
+      <item path="BMVisor.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="guest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="guest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="host.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="host.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="isr_wrapper.asm" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="isr_wrapper.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="pmode.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="pmode.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="pmode_screen.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="pmode_screen.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="types.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="utility.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="utility.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="visor_main.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="visor_main.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="vmcb.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="x86.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="x86.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="x86_architecture.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="xen_types.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>

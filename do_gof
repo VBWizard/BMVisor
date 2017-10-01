@@ -1,0 +1,5 @@
+#!/bin/bash
+pushd /home/yogi/NetBeansProjects/Injector/dist/Debug/GNU-Linux-x86/
+./gof
+popd
+

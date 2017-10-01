@@ -1,0 +1,353 @@
+0-visor_main.c:    guest.vmcb->nested_cr3 = vhost.CR3 - 0x200000;
+0-visor_main.c:    guest.vmcb->iopm_base_pa = VMCB_START_ADDRESS + VMCB_IOIO_DEF_OFFSET;
+BMVisor.h:#define SET_GUEST_CARRY_FLAG guest.vmcb->rflags = guest.vmcb->rflags | 0x1
+BMVisor.h:#define CLEAR_GUEST_CARRY_FLAG guest.vmcb->rflags = guest.vmcb->rflags & 0xFFFFFFFE
+BMVisor.h:#define GUEST_IN_PROTECTED_MODE ( (guest.vmcb->cr0 & 0x01) && ((guest.vmcb->rflags & 0x20000) != 0x20000) )
+BMVisor.h:#define GUEST_IN_V8086_MODE ((guest.vmcb->rflags & 0x20000) == 0x20000)
+guest.c:	return guest.vmcb->cs.sel + guest.vmcb->rip;
+guest.c:    guest.vmcb->rip = guest.vmcb->rip + Count;
+guest.c:	DWORD PTEntry = GetMemD( (OFFSET_TO_GUEST_PHYSICAL_PAGES + guest.vmcb->cr3 + 0x1000 + PTEntryNum),false); //originally used GUEST_CR3_VALUE but the guest changes that when they enter pmode
+guest.c:        DWORD PTPtr = guest.vmcb->nested_cr3 + PDirNum; //Get the pointer to the page table
+guest.c:	DWORD *GuestTable = (DWORD*)((DWORD)OFFSET_TO_GUEST_PHYSICAL_PAGES + (DWORD)guest.vmcb->cr3 + (DWORD)0x1000);  //this originally used GUEST_CR3_VALUE
+guest.c:	DWORD *GuestDir = (DWORD *)((DWORD)OFFSET_TO_GUEST_PHYSICAL_PAGES + (DWORD)guest.vmcb->cr3);
+guest.c:		GuestDir[0] = (OFFSET_TO_GUEST_PHYSICAL_PAGES + guest.vmcb->cr3 + (0x1000 * (DirNum+1))) | 7;
+guest.c:    IntDetails[IntDetailsPtr].AXVal = guest.vmcb->rax;
+guest.c:    IntDetails[IntDetailsPtr].ESVal = guest.vmcb->es.sel;	
+guest.c:    IntDetails[IntDetailsPtr].CSVal = guest.vmcb->cs.sel;
+guest.c:    IntDetails[IntDetailsPtr].IPVal = guest.vmcb->rip;
+guest.c:	WORD EAX = guest.vmcb->rax;
+guest.c:			guest.vmcb->rax = 0x0122;  //only video mode & 80x87 & DMA set  100100010
+guest.c:			guest.vmcb->rax = 0x27f;	//4 MB of ram installed - mem size / 1k
+guest.c:				guest.vmcb->rax = 0x0000;
+guest.c:				guest.vmcb->rip = guest.vmcb->nextrip;
+guest.c:                                guest.vmcb->eventinj.fields.v = true;
+guest.c:                                guest.vmcb->eventinj.fields.ev = false;
+guest.c:                                guest.vmcb->eventinj.fields.type = 4;
+guest.c:                                guest.vmcb->eventinj.fields.vector = vector;
+guest.c:                            guest.vmcb->rax = (GUEST_MEMORY_SIZE-0x100000) / 0x400; //0xC00
+guest.c:                            guest.vmcb->rax = 0x8600 | (EAX & 0x00FF);
+guest.c:                            guest.vmcb->rip = guest.vmcb->nextrip;
+guest.c:                            guest.vmcb->eventinj.fields.v = true;
+guest.c:                            guest.vmcb->eventinj.fields.ev = false;
+guest.c:                            guest.vmcb->eventinj.fields.type = 4;
+guest.c:                            guest.vmcb->eventinj.fields.vector = vector;
+guest.c:                            guest.vmcb->rip = guest.vmcb->nextrip;
+guest.c:                            guest.vmcb->rip = guest.vmcb->nextrip;
+guest.c:                            guest.vmcb->eventinj.fields.v = true;
+guest.c:                            guest.vmcb->eventinj.fields.ev = false;
+guest.c:                            guest.vmcb->eventinj.fields.type = 4;
+guest.c:                            guest.vmcb->eventinj.fields.vector = vector;
+guest.c:	DWORD GuestStackAddressBeforePop = guest.vmcb->ss.sel;
+guest.c:	 GuestStackAddressBeforePop += guest.vmcb->rsp;
+guest.c:		guest.vmcb->rflags = lNewFlags;
+guest.c:		guest.vmcb->cs.sel = lNewCS << 4;
+guest.c:		guest.vmcb->rip = lNewIP;
+guest.c:		guest.vmcb->rsp = guest.vmcb->rsp + 6;
+guest.c:	if ( (guest.vmcb->exitinfo1 & 0x8000000000000000) == 0x8000000000000000)   //Instruction was a MOV CRx
+guest.c:		GuestRequestedCR0 = guest.vmcb->rax | 0x80000000; //GetGuestMODRegGenRegValue(2,true, false);//for now
+guest.c:		guest.vmcb->rip = guest.vmcb->nextrip;
+guest.c:		GuestRequestedCR0 = ((GuestRequestedCR0 & 0xFFFF0000) | guest.vmcb->rax) | 0x80000000; //GetGuestMODRegGenRegValue(2, false, true);
+guest.c:	guest.vmcb->cr0 = GuestRequestedCR0;
+guest.c:	if ( ((guest.vmcb->cr0 & 1) == 1) )
+guest.c:        //    guest.vmcb->cr3 = GuestRequestedCR3;
+guest.c:        //    guest.vmcb->cr3 = GUEST_CR3_VALUE;
+guest.c:		guest.vmcb->cr3 = GuestRequestedCR3;
+guest.c:				return (BYTE)guest.vmcb->rax;
+guest.c:				return (BYTE)guest.vmcb->rax;
+guest.c:				return (BYTE)guest.vmcb->rax;
+guest.c:				return guest.vmcb->rsp;
+guest.c:				return (WORD)guest.vmcb->rsp;
+guest.c:				return (BYTE)guest.vmcb->rsp;
+guest.c:	if (guest.vmcb->cr0 & 0x01)
+guest.c:		reg = GetMemB(guest.vmcb->cs.sel + guest.vmcb->rip + RegOffsetFromCurrIns,true);
+guest.c:		reg = GetMemB( guest.vmcb->cs.sel + guest.vmcb->rip + RegOffsetFromCurrIns,true );
+guest.c:                            guest.vmcb->rax = Value;
+guest.c:                            guest.vmcb->rax = (WORD)Value;
+guest.c:                            guest.vmcb->rax = (BYTE)Value;
+guest.c:                            guest.vmcb->rsp = Value;
+guest.c:                            guest.vmcb->rsp = (WORD)Value;
+guest.c:                            guest.vmcb->rsp = (BYTE)Value;
+guest.c:	WORD port = (WORD)(guest.vmcb->exitinfo1 >> 16);
+guest.c:	WORD direction = (WORD)guest.vmcb->exitinfo1 & 0x1;
+guest.c:	bool sz8 =  ((guest.vmcb->exitinfo1 & 0x10) == 0x10);
+guest.c:	bool sz16 = ((guest.vmcb->exitinfo1 & 0x20) == 0x20);
+guest.c:				if ( (guest.vmcb->rax & 0xFF) == 0x17 )
+guest.c:                                    guest.vmcb->rax = (BYTE)IOPortInValue;
+guest.c:			guest.vmcb->rax = inb(port);
+guest.c:			guest.vmcb->rax = (WORD)((inb(port+1) << 8) | inb(port));
+guest.c:			guest.vmcb->rax = (DWORD)((inb(port+3) << 24) | (inb(port+2) << 16) | (inb(port+1) << 8) | inb(port));
+guest.c:			outb(port, (BYTE)guest.vmcb->rax & 0xFF); 
+guest.c:			outb(port, (BYTE)guest.vmcb->rax & 0xFF); 
+guest.c:			outb(port+1, (BYTE)(guest.vmcb->rax & 0xFF00) >> 8);
+guest.c:			outb(port, (BYTE)guest.vmcb->rax & 0xFF); 
+guest.c:			outb(port+1, (BYTE)(guest.vmcb->rax & 0xFF00) >> 8);
+guest.c:			outb(port+2, (BYTE)(guest.vmcb->rax & 0xFF0000) >> 16);
+guest.c:			outb(port+3, (BYTE)(guest.vmcb->rax & 0xFF000000) >> 24);
+guest.c:        guest.vmcb->rip = guest.vmcb->exitinfo2;
+guest.c:    guest.vmcb->exception_intercepts = 0x2000;
+guest.c:    guest.vmcb->np_enable = true;
+guest.c:    //guest.vmcb->nested_cr3 = NESTED_PAGING_DIR_FINAL_ADDRESS;
+guest.c:    guest.vmcb->exception_intercepts = 0x4000;
+guest.c:    guest.vmcb->general1_intercepts = 0x81200000; 
+guest.c:    guest.vmcb->guest_asid = 0x1;
+guest.c:    guest.vmcb->tlb_control = 0x1;
+host.c:    if ( (guest.vmcb->cr0 & 0x1) == 0x1)
+host.c:    if ( (guest.vmcb->cr0 & 0x80000000) == 0x80000000)
+host.c:    pErr = Itoa((int)guest.vmcb->exitcode, pErr, 16);
+host.c:   pErr = Itoa((int)guest.vmcb->exitinfo1, pErr, 16);
+host.c:   pErr = Itoa((int)guest.vmcb->exitinfo2, pErr, 16);
+host.c:    pErr = Itoa((int)guest.vmcb->cs.sel, pErr, 16);
+host.c:    pErr = Itoa((int)guest.vmcb->rip, pErr, 16);
+host.c:    guest.vmcb->eventinj.fields.v = false;      //Make sure event injection is turned off
+host.c:    guest.vmcb->clean_bits=0xFFFF;              //Everything is clean for now
+host.c:    switch(guest.vmcb->exitcode)
+host.c:            HandleGuestPagingException(guest.vmcb->exitinfo2);
+host.c:            IntNo = guest.vmcb->exitinfo1;
+host.c:            pErr = Itoa(guest.vmcb->rax, pErr, 16);
+host.c:            if ( ((IntNo == 0x15 && (guest.vmcb->rax & 0xFF00) == 0x8800)  )/* | IntNo == 0x1C)*/
+host.c:            | (IntNo == 0x13 && (guest.vmcb->rax & 0x0F00) == 0x0800 && (GuestRegisters[RAN_EDX] & 0xFF) == 0x80) 
+host.c:                guest.vmcb->clean_bits |= 0xFEFF;   //CS changed
+host.c:                guest.vmcb->rip = guest.vmcb->nextrip;
+host.c:                guest.vmcb->rip = guest.vmcb->nextrip;
+host.c:                guest.vmcb->eventinj.fields.v = 1;
+host.c:                guest.vmcb->eventinj.fields.ev = 0;
+host.c:                guest.vmcb->eventinj.fields.type = 4;
+host.c:                guest.vmcb->eventinj.fields.vector = IntNo;
+host.c:            guest.vmcb->clean_bits = guest.vmcb->clean_bits | 0xFEFF; //CS changed
+host.c:            pErr = Itoa((int)guest.vmcb->cs.sel;, pErr, 16);
+host.c:            pErr = Itoa((int)guest.vmcb->rip, pErr, 16);
+host.c:            pErr = Itoa(guest.vmcb->rax, pErr, 16);
+host.c:            guest.vmcb->clean_bits = 0xFFDF;   //CRX unclean
+host.c:            guest.vmcb->rip = guest.vmcb->nextrip;
+host.c:            InfiniteLoop(guest.vmcb->exitcode);
+host.c:            //if (guest.vmcb->exitcode != VMEXIT_EXCEPTION_GP)
+host.c:            if (guest.vmcb->exitcode == VMEXIT_EXCEPTION_DB)
+host.c:                guest.vmcb->eventinj.fields.v = true;
+host.c:                guest.vmcb->eventinj.fields.ev = false;
+host.c:                guest.vmcb->eventinj.fields.type = 0;
+host.c:                guest.vmcb->eventinj.fields.vector = guest.vmcb->exitcode - 0x40;
+host.c:                //SetVMCBD(VMCB_CONTROL_EVENTINJ, (DWORD)(1 << 31) | (DWORD)(0 << 11)   | (DWORD)(0 << 8) | ((BYTE)guest.vmcb->exitcode - 0x40) );
+host.c:            else if (guest.vmcb->exitcode == VMEXIT_EXCEPTION_BP)   //Breakpoint
+host.c:                guest.vmcb->eventinj.fields.v = true;
+host.c:                guest.vmcb->eventinj.fields.ev = false;
+host.c:                guest.vmcb->eventinj.fields.type = 3;
+host.c:                guest.vmcb->eventinj.fields.vector = guest.vmcb->exitcode - 0x40;
+host.c:            else if (guest.vmcb->exitcode == VMEXIT_EXCEPTION_UD)   //Undefined Opcode
+host.c:                guest.vmcb->eventinj.fields.v = true;
+host.c:                guest.vmcb->eventinj.fields.ev = false;
+host.c:                guest.vmcb->eventinj.fields.type = 3;
+host.c:                guest.vmcb->eventinj.fields.vector = guest.vmcb->exitcode - 0x40;
+host.c:                //SetVMCBD(VMCB_CONTROL_EVENTINJ, (DWORD)(1 << 31) | (DWORD)(0 << 11)  | (DWORD)(3 << 8) | ((BYTE)guest.vmcb->exitcode - 0x40) );
+host.c:            else if (guest.vmcb->exitcode == VMEXIT_EXCEPTION_GP)   //General Protection Fault
+host.c:                guest.vmcb->eventinj.fields.v = true;
+host.c:                guest.vmcb->eventinj.fields.ev = true;
+host.c:                guest.vmcb->eventinj.fields.type = 3;
+host.c:                guest.vmcb->eventinj.fields.vector = guest.vmcb->exitcode - 0x40;
+host.c:                //SetVMCBD(VMCB_CONTROL_EVENTINJ, (DWORD)(1 << 31) | (DWORD)(1 << 11)  | (DWORD)(3 << 8) | ((BYTE)guest.vmcb->exitcode - 0x40) );
+host.c:                if (guest.vmcb->exitintinfo.fields.v)
+host.c:                        guest.vmcb->eventinj.fields.errorcode = (guest.vmcb->exitintinfo.fields.vector << 3) + 2;
+host.c:                        guest.vmcb->rip = guest.vmcb->rip - 2;
+host.c:                    guest.vmcb->eventinj.fields.errorcode = guest.vmcb->exitinfo1;
+host.c:            if ( (guest.vmcb->rflags & 0x200) != 0x200)
+host.c:            InfiniteLoop(guest.vmcb->exitcode);
+host.c:            InfiniteLoop(guest.vmcb->exitcode);
+host.c:            pErr = Itoa(guest.vmcb->exitcode, pErr, 16);
+host.c:            InfiniteLoop(guest.vmcb->exitcode);
+host.c:	pErr = Itoa(guest.vmcb->cr0, pErr, 16);
+host.c:	pErr = Itoa(guest.vmcb->cr3, pErr, 16);
+host.c:	ptr = (DWORD*)guest.vmcb->nested_cr3_lo; 
+host.c:	ptrT = (DWORD*)guest.vmcb->nested_cr3_lo + 0x400;
+host.c:		ptr[cnt] = (guest.vmcb->nested_cr3_lo + 4096 + (cnt*4096)) | 7;
+visor.lst:  28:0-visor_main.c ****     guest.vmcb->nested_cr3 = vhost.CR3 - 0x200000;
+visor.lst:  79:0-visor_main.c ****     guest.vmcb->iopm_base_pa = VMCB_START_ADDRESS + VMCB_IOIO_DEF_OFFSET;
+visor.lst:  18:guest.c       **** 	return guest.vmcb->cs.sel + guest.vmcb->rip;
+visor.lst:  23:guest.c       ****     guest.vmcb->rip = guest.vmcb->rip + Count;
+visor.lst:  76:guest.c       **** 	DWORD PTEntry = GetMemD( (OFFSET_TO_GUEST_PHYSICAL_PAGES + guest.vmcb->cr3 + 0x1000 + PTEntryNum),
+visor.lst:  89:guest.c       ****         DWORD PTPtr = guest.vmcb->nested_cr3 + PDirNum; //Get the pointer to the page table
+visor.lst: 106:guest.c       **** 	DWORD *GuestTable = (DWORD*)((DWORD)OFFSET_TO_GUEST_PHYSICAL_PAGES + (DWORD)guest.vmcb->cr3 + (DWO
+visor.lst: 108:guest.c       **** 	DWORD *GuestDir = (DWORD *)((DWORD)OFFSET_TO_GUEST_PHYSICAL_PAGES + (DWORD)guest.vmcb->cr3);
+visor.lst: 121:guest.c       **** 		GuestDir[0] = (OFFSET_TO_GUEST_PHYSICAL_PAGES + guest.vmcb->cr3 + (0x1000 * (DirNum+1))) | 7;
+visor.lst: 135:guest.c       ****     IntDetails[IntDetailsPtr].AXVal = guest.vmcb->rax;
+visor.lst: 137:guest.c       ****     IntDetails[IntDetailsPtr].ESVal = guest.vmcb->es.sel;	
+visor.lst: 138:guest.c       ****     IntDetails[IntDetailsPtr].CSVal = guest.vmcb->cs.sel;
+visor.lst: 139:guest.c       ****     IntDetails[IntDetailsPtr].IPVal = guest.vmcb->rip;
+visor.lst: 145:guest.c       **** 	WORD EAX = guest.vmcb->rax;
+visor.lst: 157:guest.c       **** 			guest.vmcb->rax = 0x0122;  //only video mode & 80x87 & DMA set  100100010
+visor.lst: 160:guest.c       **** 			guest.vmcb->rax = 0x27f;	//4 MB of ram installed - mem size / 1k
+visor.lst: 166:guest.c       **** 				guest.vmcb->rax = 0x0000;
+visor.lst: 177:guest.c       **** 				guest.vmcb->rip = guest.vmcb->nextrip;
+visor.lst: 178:guest.c       ****                                 guest.vmcb->eventinj.fields.v = true;
+visor.lst: 179:guest.c       ****                                 guest.vmcb->eventinj.fields.ev = false;
+visor.lst: 180:guest.c       ****                                 guest.vmcb->eventinj.fields.type = 4;
+visor.lst: 181:guest.c       ****                                 guest.vmcb->eventinj.fields.vector = vector;
+visor.lst: 177:guest.c       **** 				guest.vmcb->rip = guest.vmcb->nextrip;
+visor.lst: 178:guest.c       ****                                 guest.vmcb->eventinj.fields.v = true;
+visor.lst: 179:guest.c       ****                                 guest.vmcb->eventinj.fields.ev = false;
+visor.lst: 180:guest.c       ****                                 guest.vmcb->eventinj.fields.type = 4;
+visor.lst: 181:guest.c       ****                                 guest.vmcb->eventinj.fields.vector = vector;
+visor.lst: 188:guest.c       ****                             guest.vmcb->rax = (GUEST_MEMORY_SIZE-0x100000) / 0x400; //0xC00
+visor.lst: 193:guest.c       ****                             guest.vmcb->rax = 0x8600 | (EAX & 0x00FF);
+visor.lst: 198:guest.c       ****                             guest.vmcb->rip = guest.vmcb->nextrip;
+visor.lst: 199:guest.c       ****                             guest.vmcb->eventinj.fields.v = true;
+visor.lst: 200:guest.c       ****                             guest.vmcb->eventinj.fields.ev = false;
+visor.lst: 201:guest.c       ****                             guest.vmcb->eventinj.fields.type = 4;
+visor.lst: 202:guest.c       ****                             guest.vmcb->eventinj.fields.vector = vector;
+visor.lst: 193:guest.c       ****                             guest.vmcb->rax = 0x8600 | (EAX & 0x00FF);
+visor.lst: 198:guest.c       ****                             guest.vmcb->rip = guest.vmcb->nextrip;
+visor.lst: 199:guest.c       ****                             guest.vmcb->eventinj.fields.v = true;
+visor.lst: 200:guest.c       ****                             guest.vmcb->eventinj.fields.ev = false;
+visor.lst: 201:guest.c       ****                             guest.vmcb->eventinj.fields.type = 4;
+visor.lst: 202:guest.c       ****                             guest.vmcb->eventinj.fields.vector = vector;
+visor.lst: 208:guest.c       ****                             guest.vmcb->rip = guest.vmcb->nextrip;
+visor.lst: 209:guest.c       ****                             guest.vmcb->rip = guest.vmcb->nextrip;
+visor.lst: 210:guest.c       ****                             guest.vmcb->eventinj.fields.v = true;
+visor.lst: 211:guest.c       ****                             guest.vmcb->eventinj.fields.ev = false;
+visor.lst: 212:guest.c       ****                             guest.vmcb->eventinj.fields.type = 4;
+visor.lst: 213:guest.c       ****                             guest.vmcb->eventinj.fields.vector = vector;
+visor.lst: 225:guest.c       **** 	DWORD GuestStackAddressBeforePop = guest.vmcb->ss.sel;
+visor.lst: 226:guest.c       **** 	 GuestStackAddressBeforePop += guest.vmcb->rsp;
+visor.lst: 236:guest.c       **** 		guest.vmcb->rflags = lNewFlags;
+visor.lst: 240:guest.c       **** 		guest.vmcb->cs.sel = lNewCS << 4;
+visor.lst: 242:guest.c       **** 		guest.vmcb->rip = lNewIP;
+visor.lst: 246:guest.c       **** 		guest.vmcb->rsp = guest.vmcb->rsp + 6;
+visor.lst: 262:guest.c       **** 	if ( (guest.vmcb->exitinfo1 & 0x8000000000000000) == 0x8000000000000000)   //Instruction was a MOV
+visor.lst: 263:guest.c       **** 		GuestRequestedCR0 = guest.vmcb->rax | 0x80000000; //GetGuestMODRegGenRegValue(2,true, false);//fo
+visor.lst: 267:guest.c       **** 		guest.vmcb->rip = guest.vmcb->nextrip;
+visor.lst: 271:guest.c       **** 		GuestRequestedCR0 = ((GuestRequestedCR0 & 0xFFFF0000) | guest.vmcb->rax) | 0x80000000; //GetGuest
+visor.lst: 272:guest.c       **** 	guest.vmcb->cr0 = GuestRequestedCR0;
+visor.lst: 273:guest.c       **** 	if ( ((guest.vmcb->cr0 & 1) == 1) )
+visor.lst: 281:guest.c       ****         //    guest.vmcb->cr3 = GuestRequestedCR3;
+visor.lst: 286:guest.c       ****         //    guest.vmcb->cr3 = GUEST_CR3_VALUE;
+visor.lst: 310:guest.c       **** 		guest.vmcb->cr3 = GuestRequestedCR3;
+visor.lst: 337:guest.c       **** 				return (BYTE)guest.vmcb->rax;
+visor.lst: 339:guest.c       **** 				return (BYTE)guest.vmcb->rax;
+visor.lst: 341:guest.c       **** 				return (BYTE)guest.vmcb->rax;
+visor.lst: 365:guest.c       **** 				return guest.vmcb->rsp;
+visor.lst: 367:guest.c       **** 				return (WORD)guest.vmcb->rsp;
+visor.lst: 369:guest.c       **** 				return (BYTE)guest.vmcb->rsp;
+visor.lst: 398:guest.c       **** 	if (guest.vmcb->cr0 & 0x01)
+visor.lst: 400:guest.c       **** 		reg = GetMemB(guest.vmcb->cs.sel + guest.vmcb->rip + RegOffsetFromCurrIns,true);
+visor.lst: 402:guest.c       **** 		reg = GetMemB( guest.vmcb->cs.sel + guest.vmcb->rip + RegOffsetFromCurrIns,true );
+visor.lst: 408:guest.c       ****                             guest.vmcb->rax = Value;
+visor.lst: 410:guest.c       ****                             guest.vmcb->rax = (WORD)Value;
+visor.lst: 412:guest.c       ****                             guest.vmcb->rax = (BYTE)Value;
+visor.lst: 410:guest.c       ****                             guest.vmcb->rax = (WORD)Value;
+visor.lst: 412:guest.c       ****                             guest.vmcb->rax = (BYTE)Value;
+visor.lst: 456:guest.c       ****                             guest.vmcb->rsp = Value;
+visor.lst: 458:guest.c       ****                             guest.vmcb->rsp = (WORD)Value;
+visor.lst: 460:guest.c       ****                             guest.vmcb->rsp = (BYTE)Value;
+visor.lst: 458:guest.c       ****                             guest.vmcb->rsp = (WORD)Value;
+visor.lst: 460:guest.c       ****                             guest.vmcb->rsp = (BYTE)Value;
+visor.lst: 475:guest.c       **** 	WORD port = (WORD)(guest.vmcb->exitinfo1 >> 16);
+visor.lst: 476:guest.c       **** 	WORD direction = (WORD)guest.vmcb->exitinfo1 & 0x1;
+visor.lst: 477:guest.c       **** 	bool sz8 =  ((guest.vmcb->exitinfo1 & 0x10) == 0x10);
+visor.lst: 478:guest.c       **** 	bool sz16 = ((guest.vmcb->exitinfo1 & 0x20) == 0x20);
+visor.lst: 486:guest.c       **** 				if ( (guest.vmcb->rax & 0xFF) == 0x17 )
+visor.lst: 511:guest.c       ****                                     guest.vmcb->rax = (BYTE)IOPortInValue;
+visor.lst: 527:guest.c       **** 			guest.vmcb->rax = inb(port);
+visor.lst: 531:guest.c       **** 			guest.vmcb->rax = (WORD)((inb(port+1) << 8) | inb(port));
+visor.lst: 535:guest.c       **** 			guest.vmcb->rax = (DWORD)((inb(port+3) << 24) | (inb(port+2) << 16) | (inb(port+1) << 8) | inb(p
+visor.lst: 541:guest.c       **** 			outb(port, (BYTE)guest.vmcb->rax & 0xFF); 
+visor.lst: 544:guest.c       **** 			outb(port, (BYTE)guest.vmcb->rax & 0xFF); 
+visor.lst: 545:guest.c       **** 			outb(port+1, (BYTE)(guest.vmcb->rax & 0xFF00) >> 8);
+visor.lst: 549:guest.c       **** 			outb(port, (BYTE)guest.vmcb->rax & 0xFF); 
+visor.lst: 550:guest.c       **** 			outb(port+1, (BYTE)(guest.vmcb->rax & 0xFF00) >> 8);
+visor.lst: 551:guest.c       **** 			outb(port+2, (BYTE)(guest.vmcb->rax & 0xFF0000) >> 16);
+visor.lst: 552:guest.c       **** 			outb(port+3, (BYTE)(guest.vmcb->rax & 0xFF000000) >> 24);
+visor.lst: 556:guest.c       ****         guest.vmcb->rip = guest.vmcb->exitinfo2;
+visor.lst: 562:guest.c       ****     guest.vmcb->exception_intercepts = 0x2000;
+visor.lst: 563:guest.c       ****     guest.vmcb->np_enable = true;
+visor.lst: 565:guest.c       ****     //guest.vmcb->nested_cr3 = NESTED_PAGING_DIR_FINAL_ADDRESS;
+visor.lst: 567:guest.c       ****     guest.vmcb->exception_intercepts = 0x4000;
+visor.lst: 569:guest.c       ****     guest.vmcb->general1_intercepts = 0x81200000; 
+visor.lst: 570:guest.c       ****     guest.vmcb->guest_asid = 0x1;
+visor.lst: 571:guest.c       ****     guest.vmcb->tlb_control = 0x1;
+visor.lst: 287:host.c        ****     if ( (guest.vmcb->cr0 & 0x1) == 0x1)
+visor.lst: 291:host.c        ****     if ( (guest.vmcb->cr0 & 0x80000000) == 0x80000000)
+visor.lst: 295:host.c        ****     pErr = Itoa((int)guest.vmcb->exitcode, pErr, 16);
+visor.lst: 298:host.c        ****    pErr = Itoa((int)guest.vmcb->exitinfo1, pErr, 16);
+visor.lst: 301:host.c        ****    pErr = Itoa((int)guest.vmcb->exitinfo2, pErr, 16);
+visor.lst: 306:host.c        ****     pErr = Itoa((int)guest.vmcb->cs.sel, pErr, 16);
+visor.lst: 310:host.c        ****     pErr = Itoa((int)guest.vmcb->rip, pErr, 16);
+visor.lst: 314:host.c        ****     guest.vmcb->eventinj.fields.v = false;      //Make sure event injection is turned off
+visor.lst: 315:host.c        ****     guest.vmcb->clean_bits=0xFFFF;              //Everything is clean for now
+visor.lst: 316:host.c        ****     switch(guest.vmcb->exitcode)
+visor.lst: 320:host.c        ****             HandleGuestPagingException(guest.vmcb->exitinfo2);
+visor.lst: 324:host.c        ****             IntNo = guest.vmcb->exitinfo1;
+visor.lst: 330:host.c        ****             pErr = Itoa(guest.vmcb->rax, pErr, 16);
+visor.lst: 336:host.c        ****             if ( ((IntNo == 0x15 && (guest.vmcb->rax & 0xFF00) == 0x8800)  )/* | IntNo == 0x1C)*/
+visor.lst: 338:host.c        ****             | (IntNo == 0x13 && (guest.vmcb->rax & 0x0F00) == 0x0800 && (GuestRegisters[RAN_EDX] & 
+visor.lst: 336:host.c        ****             if ( ((IntNo == 0x15 && (guest.vmcb->rax & 0xFF00) == 0x8800)  )/* | IntNo == 0x1C)*/
+visor.lst: 342:host.c        ****                 guest.vmcb->clean_bits |= 0xFEFF;   //CS changed
+visor.lst: 343:host.c        ****                 guest.vmcb->rip = guest.vmcb->nextrip;
+visor.lst: 348:host.c        ****                 guest.vmcb->rip = guest.vmcb->nextrip;
+visor.lst: 349:host.c        ****                 guest.vmcb->eventinj.fields.v = 1;
+visor.lst: 350:host.c        ****                 guest.vmcb->eventinj.fields.ev = 0;
+visor.lst: 351:host.c        ****                 guest.vmcb->eventinj.fields.type = 4;
+visor.lst: 352:host.c        ****                 guest.vmcb->eventinj.fields.vector = IntNo;
+visor.lst: 348:host.c        ****                 guest.vmcb->rip = guest.vmcb->nextrip;
+visor.lst: 349:host.c        ****                 guest.vmcb->eventinj.fields.v = 1;
+visor.lst: 350:host.c        ****                 guest.vmcb->eventinj.fields.ev = 0;
+visor.lst: 351:host.c        ****                 guest.vmcb->eventinj.fields.type = 4;
+visor.lst: 352:host.c        ****                 guest.vmcb->eventinj.fields.vector = IntNo;
+visor.lst: 358:host.c        ****             guest.vmcb->clean_bits = guest.vmcb->clean_bits | 0xFEFF; //CS changed
+visor.lst: 368:host.c        ****             pErr = Itoa((int)guest.vmcb->cs.sel;, pErr, 16);
+visor.lst: 372:host.c        ****             pErr = Itoa((int)guest.vmcb->rip, pErr, 16);
+visor.lst: 376:host.c        ****             pErr = Itoa(guest.vmcb->rax, pErr, 16);
+visor.lst: 378:host.c        ****             guest.vmcb->clean_bits = 0xFFDF;   //CRX unclean
+visor.lst: 379:host.c        ****             guest.vmcb->rip = guest.vmcb->nextrip;
+visor.lst: 394:host.c        ****             InfiniteLoop(guest.vmcb->exitcode);
+visor.lst: 420:host.c        ****             //if (guest.vmcb->exitcode != VMEXIT_EXCEPTION_GP)
+visor.lst: 421:host.c        ****             if (guest.vmcb->exitcode == VMEXIT_EXCEPTION_DB)
+visor.lst: 424:host.c        ****                 guest.vmcb->eventinj.fields.v = true;
+visor.lst: 425:host.c        ****                 guest.vmcb->eventinj.fields.ev = false;
+visor.lst: 426:host.c        ****                 guest.vmcb->eventinj.fields.type = 0;
+visor.lst: 427:host.c        ****                 guest.vmcb->eventinj.fields.vector = guest.vmcb->exitcode - 0x40;
+visor.lst: 430:host.c        ****             else if (guest.vmcb->exitcode == VMEXIT_EXCEPTION_BP)   //Breakpoint
+visor.lst: 432:host.c        ****                 guest.vmcb->eventinj.fields.v = true;
+visor.lst: 433:host.c        ****                 guest.vmcb->eventinj.fields.ev = false;
+visor.lst: 434:host.c        ****                 guest.vmcb->eventinj.fields.type = 3;
+visor.lst: 435:host.c        ****                 guest.vmcb->eventinj.fields.vector = guest.vmcb->exitcode - 0x40;
+visor.lst: 438:host.c        ****             else if (guest.vmcb->exitcode == VMEXIT_EXCEPTION_UD)   //Undefined Opcode
+visor.lst: 440:host.c        ****                 guest.vmcb->eventinj.fields.v = true;
+visor.lst: 441:host.c        ****                 guest.vmcb->eventinj.fields.ev = false;
+visor.lst: 442:host.c        ****                 guest.vmcb->eventinj.fields.type = 3;
+visor.lst: 443:host.c        ****                 guest.vmcb->eventinj.fields.vector = guest.vmcb->exitcode - 0x40;
+visor.lst: 446:host.c        ****             else if (guest.vmcb->exitcode == VMEXIT_EXCEPTION_GP)   //General Protection Fault
+visor.lst: 449:host.c        ****                 guest.vmcb->eventinj.fields.v = true;
+visor.lst: 450:host.c        ****                 guest.vmcb->eventinj.fields.ev = true;
+visor.lst: 451:host.c        ****                 guest.vmcb->eventinj.fields.type = 3;
+visor.lst: 452:host.c        ****                 guest.vmcb->eventinj.fields.vector = guest.vmcb->exitcode - 0x40;
+visor.lst: 455:host.c        ****                 if (guest.vmcb->exitintinfo.fields.v)
+visor.lst: 457:host.c        ****                         guest.vmcb->eventinj.fields.errorcode = (guest.vmcb->exitintinfo.fields.vec
+visor.lst: 458:host.c        ****                         guest.vmcb->rip = guest.vmcb->rip - 2;
+visor.lst: 461:host.c        ****                     guest.vmcb->eventinj.fields.errorcode = guest.vmcb->exitinfo1;
+visor.lst: 430:host.c        ****             else if (guest.vmcb->exitcode == VMEXIT_EXCEPTION_BP)   //Breakpoint
+visor.lst: 432:host.c        ****                 guest.vmcb->eventinj.fields.v = true;
+visor.lst: 433:host.c        ****                 guest.vmcb->eventinj.fields.ev = false;
+visor.lst: 434:host.c        ****                 guest.vmcb->eventinj.fields.type = 3;
+visor.lst: 435:host.c        ****                 guest.vmcb->eventinj.fields.vector = guest.vmcb->exitcode - 0x40;
+visor.lst: 438:host.c        ****             else if (guest.vmcb->exitcode == VMEXIT_EXCEPTION_UD)   //Undefined Opcode
+visor.lst: 440:host.c        ****                 guest.vmcb->eventinj.fields.v = true;
+visor.lst: 441:host.c        ****                 guest.vmcb->eventinj.fields.ev = false;
+visor.lst: 442:host.c        ****                 guest.vmcb->eventinj.fields.type = 3;
+visor.lst: 443:host.c        ****                 guest.vmcb->eventinj.fields.vector = guest.vmcb->exitcode - 0x40;
+visor.lst: 446:host.c        ****             else if (guest.vmcb->exitcode == VMEXIT_EXCEPTION_GP)   //General Protection Fault
+visor.lst: 449:host.c        ****                 guest.vmcb->eventinj.fields.v = true;
+visor.lst: 450:host.c        ****                 guest.vmcb->eventinj.fields.ev = true;
+visor.lst: 451:host.c        ****                 guest.vmcb->eventinj.fields.type = 3;
+visor.lst: 452:host.c        ****                 guest.vmcb->eventinj.fields.vector = guest.vmcb->exitcode - 0x40;
+visor.lst: 455:host.c        ****                 if (guest.vmcb->exitintinfo.fields.v)
+visor.lst: 457:host.c        ****                         guest.vmcb->eventinj.fields.errorcode = (guest.vmcb->exitintinfo.fields.vec
+visor.lst: 458:host.c        ****                         guest.vmcb->rip = guest.vmcb->rip - 2;
+visor.lst: 461:host.c        ****                     guest.vmcb->eventinj.fields.errorcode = guest.vmcb->exitinfo1;
+visor.lst: 465:host.c        ****             if ( (guest.vmcb->rflags & 0x200) != 0x200)
+visor.lst: 468:host.c        ****             InfiniteLoop(guest.vmcb->exitcode);
+visor.lst: 473:host.c        ****             InfiniteLoop(guest.vmcb->exitcode);
+visor.lst: 476:host.c        ****             pErr = Itoa(guest.vmcb->exitcode, pErr, 16);
+visor.lst: 478:host.c        ****             InfiniteLoop(guest.vmcb->exitcode);
+visor.lst: 563:host.c        **** 	pErr = Itoa(guest.vmcb->cr0, pErr, 16);
+visor.lst: 566:host.c        **** 	pErr = Itoa(guest.vmcb->cr3, pErr, 16);
+visor.lst: 592:host.c        **** 	ptr = (DWORD*)guest.vmcb->nested_cr3_lo; 
+visor.lst: 593:host.c        **** 	ptrT = (DWORD*)guest.vmcb->nested_cr3_lo + 0x400;
+visor.lst: 597:host.c        **** 		ptr[cnt] = (guest.vmcb->nested_cr3_lo + 4096 + (cnt*4096)) | 7;
