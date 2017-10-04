@@ -203,6 +203,10 @@ void HandleRealModeSWInterrupt(BYTE vector)
 //			}
 			break;
 		case 0x15:
+#ifdef DEBUG
+                    printd("INT15 ");
+                    printd(Itoa(guest.vmcb->rax & 0xFFFF,pErr,16));
+#endif
                     a = guest.vmcb->rax;
                     if ( (a & 0xFF00) == 0x8800)
                     {
@@ -211,7 +215,7 @@ void HandleRealModeSWInterrupt(BYTE vector)
                         else
                             guest.vmcb->rax = (guest.memSize-0x100000) / 0x400; //0xC00
 #ifdef DEBUG
-                        printd("INT15 returning ");
+                        printd(" - ret=");
                         printd(Itoa(guest.vmcb->rax,pErr,16));
                         printd("\n");
 #endif
@@ -221,12 +225,20 @@ void HandleRealModeSWInterrupt(BYTE vector)
                     {
                         guest.vmcb->rax = (guest.vmcb->rax & 0xFFFFFFFFFFFF00FF) | 0x8600;
                         SET_GUEST_CARRY_FLAG;
+#ifdef DEBUG
+                        printd(" - I");
+                        printd("\n");
+#endif
                     }
                     else if  (((guest.vmcb->rax & 0xFFFF) == 0xE801) || ((guest.vmcb->rax & 0xFFFF) == 0xE881) || ((guest.vmcb->rax & 0xFFFF) == 0xDA88) 
                             || (((guest.vmcb->rax & 0xFF00) & 0x8A00) == 0x8A00) || (((guest.vmcb->rax & 0xFF00) & 0xC700) == 0xC700))
                     {
                         guest.vmcb->rax = (guest.vmcb->rax & 0xFFFFFFFFFFFF00FF) | 0x8600;
                         SET_GUEST_CARRY_FLAG;
+#ifdef DEBUG
+                        printd(" - I");
+                        printd("\n");
+#endif
                     }
                     else
                     {
@@ -234,7 +246,10 @@ void HandleRealModeSWInterrupt(BYTE vector)
                         guest.vmcb->eventinj.fields.ev = 0;
                         guest.vmcb->eventinj.fields.type = 4;
                         guest.vmcb->eventinj.fields.vector = vector;
-                        
+#ifdef DEBUG
+                        printd(" - I");
+                        printd("\n");
+#endif
                         //SetVMCBD(VMCB_CONTROL_EVENTINJ, (DWORD)(1 << 31) | (DWORD)(0 << 11) | (DWORD)(4 << 8) | (BYTE)vector);
                     }
                     break;
@@ -246,6 +261,8 @@ void HandleRealModeSWInterrupt(BYTE vector)
                             guest.vmcb->eventinj.fields.type = 4;
                             guest.vmcb->eventinj.fields.vector = vector;
                             //SetVMCBD(VMCB_CONTROL_EVENTINJ, (DWORD)(1 << 31) | (DWORD)(0 << 11) | (DWORD)(4 << 8) | (BYTE)vector);
+                            printd(" - I");
+                            printd("\n");
 			}
 			break;
 	}

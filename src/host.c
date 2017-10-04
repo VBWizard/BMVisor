@@ -1,6 +1,7 @@
 #include "host.h"
 #include "stdio.h"
 #include "utility.h"
+#include "pmode.h"
 
 DWORD lTempDest, lTempSource;
 DWORD HostRegisters[14];
@@ -392,26 +393,74 @@ asm("xchgw bx,bx\n");
                 printd(Itoa((guest.vmcb->rip & 0xFFFFFFFF),pErr,16));
                 printd("\n\r");
             }
-*/            if (IntNo==0x15 || IntNo==0x13)
+*/            if (IntNo==0x15 /*|| IntNo==0x13*/)
             {
                 HandleRealModeSWInterrupt(IntNo);
 //asm("xchgw bx,bx\n");
             }
             else
             {
+#ifdef DEBUG
+                if (IntNo != 0x1c)
+                {
+                    printd("INT");
+                    printd(Itoa(IntNo,pErr,16));
+                    printd(" - Injecting\n");
+                }
+#endif
+/*                if (IntNo == 0x10)
+                {
+                    printd("INT");
+                    printd(Itoa(IntNo,pErr,16));
+                    printd(" @ 0x");
+                    printd(Itoa((int)guest.vmcb->cs.sel, pErr, 16));
+                    printd(":0x");
+                    printd(Itoa((int)guest.vmcb->rip, pErr, 16));
+                    printd("\n");
+                }*/
                 guest.vmcb->eventinj.fields.v = 1;
                 guest.vmcb->eventinj.fields.ev = 0;
                 guest.vmcb->eventinj.fields.errorcode = 0;
                 guest.vmcb->eventinj.fields.type = 4;
                 guest.vmcb->eventinj.fields.vector = IntNo;
             }
-            instructionByte = GetMemB(getLinearCSEIP(),true);
-            if (instructionByte==0xcc || instructionByte==0xce)
-                IncrementGuestIP(1);
-            else
-                IncrementGuestIP(2);
-            break;
+            //If in protected mode
+            if ((guest.vmcb->cr0 & 0x1) == 0x1)
+            {
+                //get the segment selector of the interrupt vector (iv)
+                DESCR_SEG *intDescr = (DESCR_SEG*)((long)guest.vmcb->idtr.base);
+                intDescr+=IntNo;
+                int cpl=0;
+                int dpl= GetMemB ((int)(intDescr)+5,true);
+                int present=dpl & 0x80;
 
+                dpl = (dpl >> 5) & 3;
+                if ( (guest.vmcb->rflags & 0x20000)==0x20000)
+                    cpl=3;
+                else
+                    cpl=(guest.vmcb->cs.sel & 3);
+                //If the iv is present
+                if ((present & 0x80) == 0x80)
+                    //If the dpl of the iv selector >= the cpl, increment the RIP
+                    if ( dpl >= cpl )
+                    {
+                        instructionByte = GetMemB(getLinearCSEIP(),true);
+                        if (instructionByte==0xcc || instructionByte==0xce)
+                            IncrementGuestIP(1);
+                        else
+                            IncrementGuestIP(2);
+                    }
+                    //If the dpl of the iv selector > the cpl, we won't increment the RIP because an 0xd is going to happen
+                //If the iv is not present we won't increment the RIP because an 0xd is going to happen
+                }
+            else
+            {
+                instructionByte = GetMemB(getLinearCSEIP(),true);
+                if (instructionByte==0xcc || instructionByte==0xce)
+                    IncrementGuestIP(1);
+                else
+                    IncrementGuestIP(2);
+            }
             break;
         case VMEXIT_IRET:
 asm("xchgw bx,bx\n");
@@ -427,8 +476,8 @@ asm("xchgw bx,bx\n");
             HandleCR3Read();
             break;
         case VMEXIT_CR0_WRITE:
-#ifdef DEBUG
-asm("xchgw bx,bx\n");
+//asm("xchgw bx,bx\n");
+/*#ifdef DEBUG
             pErr = Itoa((int)guest.vmcb->cs.sel, pErr, 16);
             printAt("CR0 write attempt, guest CS:EIP: ",0,6);
             printAt("gCS=0x",0,3);
@@ -438,9 +487,20 @@ asm("xchgw bx,bx\n");
             print(pErr);
             print("  -  EAX = 0x");
             pErr = Itoa(guest.vmcb->rax, pErr, 16);
-#endif
+#endif*/
+            printd("wr CR0 @ 0x");
+            printd(Itoa((int)guest.vmcb->cs.sel, pErr, 16));
+            printd(":0x");
+            printd(Itoa((int)guest.vmcb->rip, pErr, 16));
+            printd(" - Old=");
+            printd(Itoa(guest.vmcb->cr0,pErr,16));
+            printd(", New=");
+            printd(Itoa(guest.vmcb->rax & 0xFFFFFFFF,pErr,16));
+            printd("\n");
             guest.vmcb->clean_bits = 0xFFDF;   //CRX unclean
-            HandleCR0Write();
+            guest.vmcb->cr0=guest.vmcb->rax & 0xFFFFFFFF;
+            guest.vmcb->rip += 3; //this one works  //guest.vmcb->nextrip;
+        //HandleCR0Write();
             break;
         case VMEXIT_CR3_WRITE:
 asm("xchgw bx,bx\n");

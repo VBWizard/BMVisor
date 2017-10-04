@@ -17,7 +17,7 @@
 #define START_MODULE_SPT_ADDR 0xfff0
 #define FATAL_ERROR_SVM -1
 #define DEBUG_BASIC
-#define DEBUG
+//#define DEBUG
 
 #ifdef __GCC__
 typedef unsigned long long QWORD;
