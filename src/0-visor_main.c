@@ -22,7 +22,7 @@ void main(void)
     setHostSegReg(GS, SELECTOR_VISOR_DATA);
 
     vhost.memSize = 0x15000000;
-    guest.memSize = 24*1024*1024; //0x3000000;
+    guest.memSize = 64*1024*1024; //0x3000000;
     guest.GuestMemStartAddress = 0x0;
     //clr 09/25/2017: Changed from commented to 0x10000000
     vhost.CodeBase = 0x10000000; //guest.memSize + guest.GuestMemStartAddress + (1024*1024*1);    

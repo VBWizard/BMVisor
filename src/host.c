@@ -333,7 +333,8 @@ void ProcessVMRunResults()
     guest.vmcb->tlb_control = 0;
     guest.vmcb->eventinj.fields.v = false;      //Make sure event injection is turned off
     guest.vmcb->clean_bits=0xFFFFFFFF;              //Everything is clean for now
-    IntNo = guest.vmcb->exitinfo1;
+    //IntNo = guest.vmcb->exitinfo1;
+    IntNo = GetMemB(getLinearCSEIP()+1,true);
     switch(guest.vmcb->exitcode)
     {
         case VMEXIT_NPF :	//Paging exception

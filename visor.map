@@ -73,186 +73,186 @@ LOAD build/Debug/GNU-Linux-x86/src/utility.o
 LOAD build/Debug/GNU-Linux-x86/src/x86.o
                 0x0000000000000000                . = 0x0
 
-.text           0x0000000000000000     0x7725 load address 0x0000000000000200
+.text           0x0000000000000000     0x7731 load address 0x0000000000000200
                 0x0000000000000000                _text = .
  *(.text)
- .text          0x0000000000000000      0x4e0 build/Debug/GNU-Linux-x86/src/0-visor_main.o
+ .text          0x0000000000000000      0x4db build/Debug/GNU-Linux-x86/src/0-visor_main.o
                 0x0000000000000002                main
- .text          0x00000000000004e0     0x2200 build/Debug/GNU-Linux-x86/src/guest.o
-                0x00000000000004e0                getLinearCSEIP
-                0x000000000000050b                IncrementGuestIP
-                0x0000000000000551                SetupGuestBootMemory
-                0x000000000000060c                DoGuestPageLookup
-                0x000000000000071b                DoNestedPageLookup
-                0x00000000000007d3                CaptureInterruptDetails
-                0x00000000000008a5                HandleRealModeSWInterrupt
-                0x0000000000000e02                PopCSIPFlagsOffGuestStackReal16
-                0x0000000000000f3e                HandleInterrutpReturn
-                0x0000000000000f4c                HandleCR0Write
-                0x000000000000127f                HandleCR0Read
-                0x000000000000132a                SetGPRValue
-                0x00000000000015b1                GetGPRValue
-                0x00000000000017e0                HandleCR3Write
-                0x0000000000001890                HandleCR3Read
-                0x0000000000001903                GetGuestMODRegGenRegValue
-                0x0000000000001b2a                SetGuestMODRegGenRegValue
-                0x0000000000001dcd                HandleGuestIO
-                0x0000000000002255                InitializeGuest
-                0x0000000000002546                SetIOIOPort
-                0x00000000000025e5                GetIOIOPort
-                0x0000000000002641                HandleGuestPagingException
-                0x00000000000026bd                HandleGuestCPUID
- .text          0x00000000000026e0     0x3373 build/Debug/GNU-Linux-x86/src/host.o
-                0x00000000000026e0                host_isr_handler
-                0x00000000000029ae                host_paging_handler
-                0x00000000000029ca                timer_handler
-                0x00000000000029e1                kbd_handler
-                0x00000000000029fa                setup_IDT_entry
-                0x0000000000002a67                SetupHostIDT
-                0x0000000000002e9a                UpdatePDEntry
-                0x0000000000002edc                ProcessVMRunResults
-                0x0000000000003da7                DoVisor
-                0x0000000000003ef2                InfiniteLoop
-                0x00000000000040ba                SetupHostPaging
-                0x000000000000423a                RelocateMyself
-                0x00000000000042c8                SaveHostBIOS
-                0x0000000000004336                PrintHostInformation
-                0x00000000000048e3                DumpVMCB
-                0x000000000000577e                PrintE820Data
- *fill*         0x0000000000005a53        0x1 
- .text          0x0000000000005a54      0x1e3 build/Debug/GNU-Linux-x86/src/isr_wrapper.o
-                0x0000000000005a54                _isr_common
-                0x0000000000005aab                _isr_00_wrapper
-                0x0000000000005ab3                _isr_01_wrapper
-                0x0000000000005abb                _isr_02_wrapper
-                0x0000000000005ac3                _isr_03_wrapper
-                0x0000000000005acb                _isr_04_wrapper
-                0x0000000000005ad3                _isr_05_wrapper
-                0x0000000000005ade                _isr_06_wrapper
-                0x0000000000005ae9                _isr_07_wrapper
-                0x0000000000005af4                _isr_08_wrapper
-                0x0000000000005afc                _isr_09_wrapper
-                0x0000000000005b04                _isr_0A_wrapper
-                0x0000000000005b0f                _isr_0B_wrapper
-                0x0000000000005b1a                _isr_0C_wrapper
-                0x0000000000005b25                _isr_0D_wrapper
-                0x0000000000005b30                _isr_0E_wrapper
-                0x0000000000005b3f                _isr_0F_wrapper
-                0x0000000000005b4a                _isr_10_wrapper
-                0x0000000000005b55                _isr_11_wrapper
-                0x0000000000005b60                _isr_12_wrapper
-                0x0000000000005b6b                _isr_13_wrapper
-                0x0000000000005b76                _isr_14_wrapper
-                0x0000000000005b81                _isr_15_wrapper
-                0x0000000000005b8c                _isr_16_wrapper
-                0x0000000000005b97                _isr_17_wrapper
-                0x0000000000005ba2                _isr_18_wrapper
-                0x0000000000005bad                _isr_19_wrapper
-                0x0000000000005bb8                _isr_1A_wrapper
-                0x0000000000005bc3                _isr_1B_wrapper
-                0x0000000000005bce                _isr_1C_wrapper
-                0x0000000000005bd9                _isr_1D_wrapper
-                0x0000000000005be4                _isr_1E_wrapper
-                0x0000000000005bef                _isr_1F_wrapper
-                0x0000000000005bfa                _isr_20_wrapper
-                0x0000000000005c02                _isr_21_wrapper
-                0x0000000000005c2a                _exception_number
-                0x0000000000005c2c                _ltr
- .text          0x0000000000005c37       0x82 build/Debug/GNU-Linux-x86/src/pmode.o
-                0x0000000000005c37                setup_GDT32_entry_gcc
- .text          0x0000000000005cb9      0x2e7 build/Debug/GNU-Linux-x86/src/pmode_screen.o
-                0x0000000000005d50                monitor_put
-                0x0000000000005e60                clrscr
-                0x0000000000005ecf                println
-                0x0000000000005efd                print
-                0x0000000000005f47                movecursor
-                0x0000000000005f62                printAt
-                0x0000000000005f83                cursorX
-                0x0000000000005f96                cursorY
- .text          0x0000000000005fa0      0x61d build/Debug/GNU-Linux-x86/src/utility.o
-                0x0000000000005fa0                RetrieveStartModuleDiskCHSValues
-                0x0000000000005fdb                CopyMemory
-                0x0000000000005ff4                ZeroMemory
-                0x000000000000600c                outb
-                0x0000000000006046                outw
-                0x0000000000006067                outd
-                0x000000000000607f                inb
-                0x000000000000609c                inw
-                0x00000000000060bb                ind
-                0x00000000000060d7                rdmsr
-                0x00000000000060f2                SVMCanBeEnabled
-                0x000000000000617d                FatalError
-                0x000000000000618a                GetMemB
-                0x00000000000061d1                GetMemW
-                0x000000000000621c                GetMemD
-                0x0000000000006265                SetMemB
-                0x00000000000062ae                SetMemW
-                0x00000000000062fa                SetMemD
-                0x000000000000633c                Itoa
-                0x000000000000641c                setup_pit_channel_0
-                0x0000000000006479                cpu_write_msr
-                0x00000000000064ac                cpu_read_msr
-                0x00000000000064f6                printd
-                0x0000000000006529                init_serial
- .text          0x00000000000065bd       0x6a build/Debug/GNU-Linux-x86/src/x86.o
-                0x00000000000065bd                setHostSegReg
- *fill*         0x0000000000006627        0x1 
- .text          0x0000000000006628      0x642 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdio.c.o)
-                0x0000000000006628                snprintf
-                0x000000000000665f                sprintf
-                0x000000000000668f                sscanf
-                0x00000000000066bf                vsnprintf
-                0x0000000000006c3c                vsprintf
-                0x0000000000006c65                vsscanf
- *fill*         0x0000000000006c6a        0x2 
- .text          0x0000000000006c6c      0x32a /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdlib.c.o)
-                0x0000000000006c6c                atoi
-                0x0000000000006cf9                atol
-                0x0000000000006d86                atoll
-                0x0000000000006e39                rand
-                0x0000000000006e7c                srand
-                0x0000000000006e89                abs
-                0x0000000000006e9d                labs
-                0x0000000000006eb1                llabs
-                0x0000000000006ee5                div
-                0x0000000000006f1e                ldiv
-                0x0000000000006f57                lldiv
- *fill*         0x0000000000006f96        0x2 
- .text          0x0000000000006f98      0x78d /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(string.c.o)
-                0x0000000000006f98                memcpy
-                0x0000000000006fea                memmove
-                0x000000000000703e                strcpy
-                0x0000000000007083                strncpy
-                0x000000000000710f                strcat
-                0x0000000000007152                strncat
-                0x00000000000071f8                memcmp
-                0x0000000000007253                strcmp
-                0x00000000000072f5                strncmp
-                0x0000000000007316                memchr
-                0x000000000000734b                strchr
-                0x0000000000007390                strcspn
-                0x00000000000073e5                strpbrk
-                0x0000000000007458                strrchr
-                0x00000000000074b5                strspn
-                0x0000000000007535                strstr
-                0x00000000000075ba                strtok
-                0x0000000000007654                memset
-                0x00000000000076da                strlen
-                0x0000000000007725                _text_end = .
+ .text          0x00000000000004db     0x21a9 build/Debug/GNU-Linux-x86/src/guest.o
+                0x00000000000004db                getLinearCSEIP
+                0x0000000000000506                IncrementGuestIP
+                0x000000000000054c                SetupGuestBootMemory
+                0x0000000000000607                DoGuestPageLookup
+                0x0000000000000716                DoNestedPageLookup
+                0x00000000000007ce                CaptureInterruptDetails
+                0x00000000000008a0                HandleRealModeSWInterrupt
+                0x0000000000000da6                PopCSIPFlagsOffGuestStackReal16
+                0x0000000000000ee2                HandleInterrutpReturn
+                0x0000000000000ef0                HandleCR0Write
+                0x0000000000001223                HandleCR0Read
+                0x00000000000012ce                SetGPRValue
+                0x0000000000001555                GetGPRValue
+                0x0000000000001784                HandleCR3Write
+                0x0000000000001834                HandleCR3Read
+                0x00000000000018a7                GetGuestMODRegGenRegValue
+                0x0000000000001ace                SetGuestMODRegGenRegValue
+                0x0000000000001d71                HandleGuestIO
+                0x00000000000021f9                InitializeGuest
+                0x00000000000024ea                SetIOIOPort
+                0x0000000000002589                GetIOIOPort
+                0x00000000000025e5                HandleGuestPagingException
+                0x0000000000002661                HandleGuestCPUID
+ .text          0x0000000000002684     0x33db build/Debug/GNU-Linux-x86/src/host.o
+                0x0000000000002684                host_isr_handler
+                0x0000000000002952                host_paging_handler
+                0x000000000000296e                timer_handler
+                0x0000000000002985                kbd_handler
+                0x000000000000299e                setup_IDT_entry
+                0x0000000000002a0b                SetupHostIDT
+                0x0000000000002e3e                UpdatePDEntry
+                0x0000000000002e80                ProcessVMRunResults
+                0x0000000000003db3                DoVisor
+                0x0000000000003efe                InfiniteLoop
+                0x00000000000040c6                SetupHostPaging
+                0x0000000000004246                RelocateMyself
+                0x00000000000042d4                SaveHostBIOS
+                0x0000000000004342                PrintHostInformation
+                0x00000000000048ef                DumpVMCB
+                0x000000000000578a                PrintE820Data
+ *fill*         0x0000000000005a5f        0x1 
+ .text          0x0000000000005a60      0x1e3 build/Debug/GNU-Linux-x86/src/isr_wrapper.o
+                0x0000000000005a60                _isr_common
+                0x0000000000005ab7                _isr_00_wrapper
+                0x0000000000005abf                _isr_01_wrapper
+                0x0000000000005ac7                _isr_02_wrapper
+                0x0000000000005acf                _isr_03_wrapper
+                0x0000000000005ad7                _isr_04_wrapper
+                0x0000000000005adf                _isr_05_wrapper
+                0x0000000000005aea                _isr_06_wrapper
+                0x0000000000005af5                _isr_07_wrapper
+                0x0000000000005b00                _isr_08_wrapper
+                0x0000000000005b08                _isr_09_wrapper
+                0x0000000000005b10                _isr_0A_wrapper
+                0x0000000000005b1b                _isr_0B_wrapper
+                0x0000000000005b26                _isr_0C_wrapper
+                0x0000000000005b31                _isr_0D_wrapper
+                0x0000000000005b3c                _isr_0E_wrapper
+                0x0000000000005b4b                _isr_0F_wrapper
+                0x0000000000005b56                _isr_10_wrapper
+                0x0000000000005b61                _isr_11_wrapper
+                0x0000000000005b6c                _isr_12_wrapper
+                0x0000000000005b77                _isr_13_wrapper
+                0x0000000000005b82                _isr_14_wrapper
+                0x0000000000005b8d                _isr_15_wrapper
+                0x0000000000005b98                _isr_16_wrapper
+                0x0000000000005ba3                _isr_17_wrapper
+                0x0000000000005bae                _isr_18_wrapper
+                0x0000000000005bb9                _isr_19_wrapper
+                0x0000000000005bc4                _isr_1A_wrapper
+                0x0000000000005bcf                _isr_1B_wrapper
+                0x0000000000005bda                _isr_1C_wrapper
+                0x0000000000005be5                _isr_1D_wrapper
+                0x0000000000005bf0                _isr_1E_wrapper
+                0x0000000000005bfb                _isr_1F_wrapper
+                0x0000000000005c06                _isr_20_wrapper
+                0x0000000000005c0e                _isr_21_wrapper
+                0x0000000000005c36                _exception_number
+                0x0000000000005c38                _ltr
+ .text          0x0000000000005c43       0x82 build/Debug/GNU-Linux-x86/src/pmode.o
+                0x0000000000005c43                setup_GDT32_entry_gcc
+ .text          0x0000000000005cc5      0x2e7 build/Debug/GNU-Linux-x86/src/pmode_screen.o
+                0x0000000000005d5c                monitor_put
+                0x0000000000005e6c                clrscr
+                0x0000000000005edb                println
+                0x0000000000005f09                print
+                0x0000000000005f53                movecursor
+                0x0000000000005f6e                printAt
+                0x0000000000005f8f                cursorX
+                0x0000000000005fa2                cursorY
+ .text          0x0000000000005fac      0x61d build/Debug/GNU-Linux-x86/src/utility.o
+                0x0000000000005fac                RetrieveStartModuleDiskCHSValues
+                0x0000000000005fe7                CopyMemory
+                0x0000000000006000                ZeroMemory
+                0x0000000000006018                outb
+                0x0000000000006052                outw
+                0x0000000000006073                outd
+                0x000000000000608b                inb
+                0x00000000000060a8                inw
+                0x00000000000060c7                ind
+                0x00000000000060e3                rdmsr
+                0x00000000000060fe                SVMCanBeEnabled
+                0x0000000000006189                FatalError
+                0x0000000000006196                GetMemB
+                0x00000000000061dd                GetMemW
+                0x0000000000006228                GetMemD
+                0x0000000000006271                SetMemB
+                0x00000000000062ba                SetMemW
+                0x0000000000006306                SetMemD
+                0x0000000000006348                Itoa
+                0x0000000000006428                setup_pit_channel_0
+                0x0000000000006485                cpu_write_msr
+                0x00000000000064b8                cpu_read_msr
+                0x0000000000006502                printd
+                0x0000000000006535                init_serial
+ .text          0x00000000000065c9       0x6a build/Debug/GNU-Linux-x86/src/x86.o
+                0x00000000000065c9                setHostSegReg
+ *fill*         0x0000000000006633        0x1 
+ .text          0x0000000000006634      0x642 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdio.c.o)
+                0x0000000000006634                snprintf
+                0x000000000000666b                sprintf
+                0x000000000000669b                sscanf
+                0x00000000000066cb                vsnprintf
+                0x0000000000006c48                vsprintf
+                0x0000000000006c71                vsscanf
+ *fill*         0x0000000000006c76        0x2 
+ .text          0x0000000000006c78      0x32a /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdlib.c.o)
+                0x0000000000006c78                atoi
+                0x0000000000006d05                atol
+                0x0000000000006d92                atoll
+                0x0000000000006e45                rand
+                0x0000000000006e88                srand
+                0x0000000000006e95                abs
+                0x0000000000006ea9                labs
+                0x0000000000006ebd                llabs
+                0x0000000000006ef1                div
+                0x0000000000006f2a                ldiv
+                0x0000000000006f63                lldiv
+ *fill*         0x0000000000006fa2        0x2 
+ .text          0x0000000000006fa4      0x78d /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(string.c.o)
+                0x0000000000006fa4                memcpy
+                0x0000000000006ff6                memmove
+                0x000000000000704a                strcpy
+                0x000000000000708f                strncpy
+                0x000000000000711b                strcat
+                0x000000000000715e                strncat
+                0x0000000000007204                memcmp
+                0x000000000000725f                strcmp
+                0x0000000000007301                strncmp
+                0x0000000000007322                memchr
+                0x0000000000007357                strchr
+                0x000000000000739c                strcspn
+                0x00000000000073f1                strpbrk
+                0x0000000000007464                strrchr
+                0x00000000000074c1                strspn
+                0x0000000000007541                strstr
+                0x00000000000075c6                strtok
+                0x0000000000007660                memset
+                0x00000000000076e6                strlen
+                0x0000000000007731                _text_end = .
 
-.eh_frame       0x0000000000007728     0x1000 load address 0x0000000000007928
- .eh_frame      0x0000000000007728       0x50 build/Debug/GNU-Linux-x86/src/0-visor_main.o
- .eh_frame      0x0000000000007778      0x35c build/Debug/GNU-Linux-x86/src/guest.o
- .eh_frame      0x0000000000007ad4      0x224 build/Debug/GNU-Linux-x86/src/host.o
- .eh_frame      0x0000000000007cf8       0x38 build/Debug/GNU-Linux-x86/src/pmode.o
- .eh_frame      0x0000000000007d30      0x158 build/Debug/GNU-Linux-x86/src/pmode_screen.o
- .eh_frame      0x0000000000007e88      0x334 build/Debug/GNU-Linux-x86/src/utility.o
- .eh_frame      0x00000000000081bc       0x38 build/Debug/GNU-Linux-x86/src/x86.o
- .eh_frame      0x00000000000081f4       0xe0 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdio.c.o)
- .eh_frame      0x00000000000082d4      0x180 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdlib.c.o)
- .eh_frame      0x0000000000008454      0x2d4 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(string.c.o)
+.eh_frame       0x0000000000007734     0x1000 load address 0x0000000000007934
+ .eh_frame      0x0000000000007734       0x50 build/Debug/GNU-Linux-x86/src/0-visor_main.o
+ .eh_frame      0x0000000000007784      0x35c build/Debug/GNU-Linux-x86/src/guest.o
+ .eh_frame      0x0000000000007ae0      0x224 build/Debug/GNU-Linux-x86/src/host.o
+ .eh_frame      0x0000000000007d04       0x38 build/Debug/GNU-Linux-x86/src/pmode.o
+ .eh_frame      0x0000000000007d3c      0x158 build/Debug/GNU-Linux-x86/src/pmode_screen.o
+ .eh_frame      0x0000000000007e94      0x334 build/Debug/GNU-Linux-x86/src/utility.o
+ .eh_frame      0x00000000000081c8       0x38 build/Debug/GNU-Linux-x86/src/x86.o
+ .eh_frame      0x0000000000008200       0xe0 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdio.c.o)
+ .eh_frame      0x00000000000082e0      0x180 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdlib.c.o)
+ .eh_frame      0x0000000000008460      0x2d4 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(string.c.o)
 
-.data           0x0000000000008740      0xb38 load address 0x0000000000008940
+.data           0x0000000000008740      0xaf8 load address 0x0000000000008940
                 0x0000000000008740                _data = .
  *(.bss)
  .bss           0x0000000000008740        0x4 build/Debug/GNU-Linux-x86/src/0-visor_main.o
@@ -295,28 +295,29 @@ LOAD build/Debug/GNU-Linux-x86/src/x86.o
  *(.rodata*)
  .rodata        0x00000000000087ec       0xd6 build/Debug/GNU-Linux-x86/src/0-visor_main.o
  *fill*         0x00000000000088c2        0x2 
- .rodata        0x00000000000088c4       0x9c build/Debug/GNU-Linux-x86/src/guest.o
- .rodata        0x0000000000008960      0x67b build/Debug/GNU-Linux-x86/src/host.o
- *fill*         0x0000000000008fdb        0x1 
- .rodata        0x0000000000008fdc      0x164 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdio.c.o)
+ .rodata        0x00000000000088c4       0x88 build/Debug/GNU-Linux-x86/src/guest.o
+ .rodata        0x000000000000894c      0x647 build/Debug/GNU-Linux-x86/src/host.o
+ *fill*         0x0000000000008f93        0x1 
+ .rodata        0x0000000000008f94      0x164 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdio.c.o)
  *(COMMON)
- COMMON         0x0000000000009140       0xc4 build/Debug/GNU-Linux-x86/src/0-visor_main.o
-                0x0000000000009140                guest
-                0x000000000000915c                host
-                0x0000000000009180                GuestRegisters
-                0x00000000000091b8                _exc_IP
-                0x00000000000091ba                _exc_CS
-                0x00000000000091c0                vhost
- COMMON         0x0000000000009204        0x8 build/Debug/GNU-Linux-x86/src/guest.o
-                0x0000000000009204                lTempSource
-                0x0000000000009208                lTempDest
- *fill*         0x000000000000920c       0x14 
- COMMON         0x0000000000009220       0x58 build/Debug/GNU-Linux-x86/src/host.o
-                0x0000000000009220                HostScancode
-                0x0000000000009228                HostTimerTicks
-                0x0000000000009230                VMCBFinalAddress
-                0x0000000000009240                HostRegisters
-                0x0000000000009278                _data_end = .
+ *fill*         0x00000000000090f8        0x8 
+ COMMON         0x0000000000009100       0xc4 build/Debug/GNU-Linux-x86/src/0-visor_main.o
+                0x0000000000009100                guest
+                0x000000000000911c                host
+                0x0000000000009140                GuestRegisters
+                0x0000000000009178                _exc_IP
+                0x000000000000917a                _exc_CS
+                0x0000000000009180                vhost
+ COMMON         0x00000000000091c4        0x8 build/Debug/GNU-Linux-x86/src/guest.o
+                0x00000000000091c4                lTempSource
+                0x00000000000091c8                lTempDest
+ *fill*         0x00000000000091cc       0x14 
+ COMMON         0x00000000000091e0       0x58 build/Debug/GNU-Linux-x86/src/host.o
+                0x00000000000091e0                HostScancode
+                0x00000000000091e8                HostTimerTicks
+                0x00000000000091f0                VMCBFinalAddress
+                0x0000000000009200                HostRegisters
+                0x0000000000009238                _data_end = .
 
 /DISCARD/
  *(.note*)
@@ -327,31 +328,31 @@ LOAD build/Debug/GNU-Linux-x86/src/x86.o
 LOAD /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a
 OUTPUT(dist/Debug/GNU-Linux-x86/bmvisor binary)
 
-.debug_info     0x0000000000000000     0x70ef
+.debug_info     0x0000000000000000     0x70c7
  .debug_info    0x0000000000000000      0xb74 build/Debug/GNU-Linux-x86/src/0-visor_main.o
- .debug_info    0x0000000000000b74     0x1256 build/Debug/GNU-Linux-x86/src/guest.o
- .debug_info    0x0000000000001dca     0x13a9 build/Debug/GNU-Linux-x86/src/host.o
- .debug_info    0x0000000000003173       0x60 build/Debug/GNU-Linux-x86/src/isr_wrapper.o
- .debug_info    0x00000000000031d3      0xa91 build/Debug/GNU-Linux-x86/src/pmode.o
- .debug_info    0x0000000000003c64      0xc0b build/Debug/GNU-Linux-x86/src/pmode_screen.o
- .debug_info    0x000000000000486f     0x1051 build/Debug/GNU-Linux-x86/src/utility.o
- .debug_info    0x00000000000058c0      0xa71 build/Debug/GNU-Linux-x86/src/x86.o
- .debug_info    0x0000000000006331      0x406 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdio.c.o)
- .debug_info    0x0000000000006737      0x347 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdlib.c.o)
- .debug_info    0x0000000000006a7e      0x671 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(string.c.o)
+ .debug_info    0x0000000000000b74     0x123f build/Debug/GNU-Linux-x86/src/guest.o
+ .debug_info    0x0000000000001db3     0x1398 build/Debug/GNU-Linux-x86/src/host.o
+ .debug_info    0x000000000000314b       0x60 build/Debug/GNU-Linux-x86/src/isr_wrapper.o
+ .debug_info    0x00000000000031ab      0xa91 build/Debug/GNU-Linux-x86/src/pmode.o
+ .debug_info    0x0000000000003c3c      0xc0b build/Debug/GNU-Linux-x86/src/pmode_screen.o
+ .debug_info    0x0000000000004847     0x1051 build/Debug/GNU-Linux-x86/src/utility.o
+ .debug_info    0x0000000000005898      0xa71 build/Debug/GNU-Linux-x86/src/x86.o
+ .debug_info    0x0000000000006309      0x406 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdio.c.o)
+ .debug_info    0x000000000000670f      0x347 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdlib.c.o)
+ .debug_info    0x0000000000006a56      0x671 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(string.c.o)
 
-.debug_abbrev   0x0000000000000000     0x1338
+.debug_abbrev   0x0000000000000000     0x12f0
  .debug_abbrev  0x0000000000000000      0x199 build/Debug/GNU-Linux-x86/src/0-visor_main.o
- .debug_abbrev  0x0000000000000199      0x343 build/Debug/GNU-Linux-x86/src/guest.o
- .debug_abbrev  0x00000000000004dc      0x327 build/Debug/GNU-Linux-x86/src/host.o
- .debug_abbrev  0x0000000000000803       0x14 build/Debug/GNU-Linux-x86/src/isr_wrapper.o
- .debug_abbrev  0x0000000000000817      0x16b build/Debug/GNU-Linux-x86/src/pmode.o
- .debug_abbrev  0x0000000000000982      0x21c build/Debug/GNU-Linux-x86/src/pmode_screen.o
- .debug_abbrev  0x0000000000000b9e      0x2e2 build/Debug/GNU-Linux-x86/src/utility.o
- .debug_abbrev  0x0000000000000e80      0x192 build/Debug/GNU-Linux-x86/src/x86.o
- .debug_abbrev  0x0000000000001012      0x10a /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdio.c.o)
- .debug_abbrev  0x000000000000111c      0x107 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdlib.c.o)
- .debug_abbrev  0x0000000000001223      0x115 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(string.c.o)
+ .debug_abbrev  0x0000000000000199      0x313 build/Debug/GNU-Linux-x86/src/guest.o
+ .debug_abbrev  0x00000000000004ac      0x30f build/Debug/GNU-Linux-x86/src/host.o
+ .debug_abbrev  0x00000000000007bb       0x14 build/Debug/GNU-Linux-x86/src/isr_wrapper.o
+ .debug_abbrev  0x00000000000007cf      0x16b build/Debug/GNU-Linux-x86/src/pmode.o
+ .debug_abbrev  0x000000000000093a      0x21c build/Debug/GNU-Linux-x86/src/pmode_screen.o
+ .debug_abbrev  0x0000000000000b56      0x2e2 build/Debug/GNU-Linux-x86/src/utility.o
+ .debug_abbrev  0x0000000000000e38      0x192 build/Debug/GNU-Linux-x86/src/x86.o
+ .debug_abbrev  0x0000000000000fca      0x10a /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdio.c.o)
+ .debug_abbrev  0x00000000000010d4      0x107 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdlib.c.o)
+ .debug_abbrev  0x00000000000011db      0x115 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(string.c.o)
 
 .debug_aranges  0x0000000000000000      0x160
  .debug_aranges
@@ -377,30 +378,30 @@ OUTPUT(dist/Debug/GNU-Linux-x86/bmvisor binary)
  .debug_aranges
                 0x0000000000000140       0x20 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(string.c.o)
 
-.debug_line     0x0000000000000000     0x15e2
- .debug_line    0x0000000000000000      0x130 build/Debug/GNU-Linux-x86/src/0-visor_main.o
- .debug_line    0x0000000000000130      0x418 build/Debug/GNU-Linux-x86/src/guest.o
- .debug_line    0x0000000000000548      0x5b5 build/Debug/GNU-Linux-x86/src/host.o
- .debug_line    0x0000000000000afd       0xdb build/Debug/GNU-Linux-x86/src/isr_wrapper.o
- .debug_line    0x0000000000000bd8       0xb7 build/Debug/GNU-Linux-x86/src/pmode.o
- .debug_line    0x0000000000000c8f      0x13c build/Debug/GNU-Linux-x86/src/pmode_screen.o
- .debug_line    0x0000000000000dcb      0x199 build/Debug/GNU-Linux-x86/src/utility.o
- .debug_line    0x0000000000000f64       0xb4 build/Debug/GNU-Linux-x86/src/x86.o
- .debug_line    0x0000000000001018      0x27a /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdio.c.o)
- .debug_line    0x0000000000001292      0x173 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdlib.c.o)
- .debug_line    0x0000000000001405      0x1dd /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(string.c.o)
+.debug_line     0x0000000000000000     0x15f1
+ .debug_line    0x0000000000000000      0x12f build/Debug/GNU-Linux-x86/src/0-visor_main.o
+ .debug_line    0x000000000000012f      0x413 build/Debug/GNU-Linux-x86/src/guest.o
+ .debug_line    0x0000000000000542      0x5ca build/Debug/GNU-Linux-x86/src/host.o
+ .debug_line    0x0000000000000b0c       0xdb build/Debug/GNU-Linux-x86/src/isr_wrapper.o
+ .debug_line    0x0000000000000be7       0xb7 build/Debug/GNU-Linux-x86/src/pmode.o
+ .debug_line    0x0000000000000c9e      0x13c build/Debug/GNU-Linux-x86/src/pmode_screen.o
+ .debug_line    0x0000000000000dda      0x199 build/Debug/GNU-Linux-x86/src/utility.o
+ .debug_line    0x0000000000000f73       0xb4 build/Debug/GNU-Linux-x86/src/x86.o
+ .debug_line    0x0000000000001027      0x27a /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdio.c.o)
+ .debug_line    0x00000000000012a1      0x173 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdlib.c.o)
+ .debug_line    0x0000000000001414      0x1dd /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(string.c.o)
 
-.debug_str      0x0000000000000000     0x41da
+.debug_str      0x0000000000000000     0x41eb
  .debug_str     0x0000000000000000      0x63f build/Debug/GNU-Linux-x86/src/0-visor_main.o
- .debug_str     0x000000000000063f      0xca2 build/Debug/GNU-Linux-x86/src/guest.o
- .debug_str     0x00000000000012e1     0x111b build/Debug/GNU-Linux-x86/src/host.o
- .debug_str     0x00000000000023fc      0x5f0 build/Debug/GNU-Linux-x86/src/pmode.o
- .debug_str     0x00000000000029ec      0x669 build/Debug/GNU-Linux-x86/src/pmode_screen.o
- .debug_str     0x0000000000003055      0x782 build/Debug/GNU-Linux-x86/src/utility.o
- .debug_str     0x00000000000037d7      0x5bc build/Debug/GNU-Linux-x86/src/x86.o
- .debug_str     0x0000000000003d93      0x1b8 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdio.c.o)
- .debug_str     0x0000000000003f4b       0xf0 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdlib.c.o)
- .debug_str     0x000000000000403b      0x19f /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(string.c.o)
+ .debug_str     0x000000000000063f      0xc9b build/Debug/GNU-Linux-x86/src/guest.o
+ .debug_str     0x00000000000012da     0x1133 build/Debug/GNU-Linux-x86/src/host.o
+ .debug_str     0x000000000000240d      0x5f0 build/Debug/GNU-Linux-x86/src/pmode.o
+ .debug_str     0x00000000000029fd      0x669 build/Debug/GNU-Linux-x86/src/pmode_screen.o
+ .debug_str     0x0000000000003066      0x782 build/Debug/GNU-Linux-x86/src/utility.o
+ .debug_str     0x00000000000037e8      0x5bc build/Debug/GNU-Linux-x86/src/x86.o
+ .debug_str     0x0000000000003da4      0x1b8 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdio.c.o)
+ .debug_str     0x0000000000003f5c       0xf0 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdlib.c.o)
+ .debug_str     0x000000000000404c      0x19f /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(string.c.o)
 
 .debug_loc      0x0000000000000000      0x7e0
  .debug_loc     0x0000000000000000      0x150 /home/yogi/src/osdevlibc/osdevlibc-read-only/libosdevc.a(stdio.c.o)
@@ -420,7 +421,6 @@ DoNestedPageLookup                                build/Debug/GNU-Linux-x86/src/
 DoVisor                                           build/Debug/GNU-Linux-x86/src/host.o
                                                   build/Debug/GNU-Linux-x86/src/0-visor_main.o
 DumpVMCB                                          build/Debug/GNU-Linux-x86/src/host.o
-                                                  build/Debug/GNU-Linux-x86/src/0-visor_main.o
 FatalError                                        build/Debug/GNU-Linux-x86/src/utility.o
                                                   build/Debug/GNU-Linux-x86/src/0-visor_main.o
 GetGPRValue                                       build/Debug/GNU-Linux-x86/src/guest.o
@@ -444,7 +444,6 @@ GuestRegisters                                    build/Debug/GNU-Linux-x86/src/
 HandleCR0Read                                     build/Debug/GNU-Linux-x86/src/guest.o
                                                   build/Debug/GNU-Linux-x86/src/host.o
 HandleCR0Write                                    build/Debug/GNU-Linux-x86/src/guest.o
-                                                  build/Debug/GNU-Linux-x86/src/host.o
 HandleCR3Read                                     build/Debug/GNU-Linux-x86/src/guest.o
                                                   build/Debug/GNU-Linux-x86/src/host.o
 HandleCR3Write                                    build/Debug/GNU-Linux-x86/src/guest.o
@@ -472,7 +471,6 @@ IntDetailsPtr                                     build/Debug/GNU-Linux-x86/src/
 InterceptCount                                    build/Debug/GNU-Linux-x86/src/host.o
 Itoa                                              build/Debug/GNU-Linux-x86/src/utility.o
                                                   build/Debug/GNU-Linux-x86/src/host.o
-                                                  build/Debug/GNU-Linux-x86/src/guest.o
 PopCSIPFlagsOffGuestStackReal16                   build/Debug/GNU-Linux-x86/src/guest.o
 PrintE820Data                                     build/Debug/GNU-Linux-x86/src/host.o
                                                   build/Debug/GNU-Linux-x86/src/0-visor_main.o
@@ -672,7 +670,7 @@ printAt                                           build/Debug/GNU-Linux-x86/src/
                                                   build/Debug/GNU-Linux-x86/src/host.o
                                                   build/Debug/GNU-Linux-x86/src/0-visor_main.o
 printd                                            build/Debug/GNU-Linux-x86/src/utility.o
-                                                  build/Debug/GNU-Linux-x86/src/guest.o
+                                                  build/Debug/GNU-Linux-x86/src/host.o
 println                                           build/Debug/GNU-Linux-x86/src/pmode_screen.o
                                                   build/Debug/GNU-Linux-x86/src/host.o
                                                   build/Debug/GNU-Linux-x86/src/0-visor_main.o

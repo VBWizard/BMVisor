@@ -261,8 +261,10 @@ void HandleRealModeSWInterrupt(BYTE vector)
                             guest.vmcb->eventinj.fields.type = 4;
                             guest.vmcb->eventinj.fields.vector = vector;
                             //SetVMCBD(VMCB_CONTROL_EVENTINJ, (DWORD)(1 << 31) | (DWORD)(0 << 11) | (DWORD)(4 << 8) | (BYTE)vector);
+#ifdef DEBUG
                             printd(" - I");
                             printd("\n");
+#endif
 			}
 			break;
 	}
@@ -820,7 +822,7 @@ lblReturn: asm("nop\n");
 void InitializeGuest()
 {
     //The shadow CR0 represents what the guest thinks the CR0 is, so no paging when we first boot
-    guest.guestViewCR0 = 0x10010; //WP bit and extension bit sest
+    guest.guestViewCR0 = 0x00010; //WP bit and extension bit sest
     guest.requestedCR3 = 0x0;
 
     //Configure the vmcb
