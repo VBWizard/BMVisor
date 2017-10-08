@@ -14,7 +14,7 @@ DWORD VMCBFinalAddress;
 DWORD gInterceptCode = 0;
 QWORD InterceptCount = 0;
 
-void InfiniteLoop(int InterceptCode);
+void InfiniteLoop(int InterceptCode, bool takeADump);
 
 /*
 BYTE GetVMCBB(DWORD Offset)
@@ -201,7 +201,7 @@ void host_paging_handler(DWORD errorCode)
 //    print(pErr);
 HPH_Loop:
     goto HPH_Loop;
-    InfiniteLoop(0x400);
+    InfiniteLoop(0x400,false);
 }
 
 void timer_handler() {
@@ -316,18 +316,9 @@ void ProcessVMRunResults()
        pErr = Itoa((int)guest.vmcb->exitinfo2, pErr, 16);
        print(", Info2: 0x");
        print(pErr);
-       pErr = Itoa((int)guest.vmcb->exitintinfo.fields.vector, pErr, 16);
-       print(", Int#: 0x");
-       print(pErr);
+       printf(" @ 0x%04X:0x%08X\n",guest.vmcb->cs.sel,guest.vmcb->rip);
 //    #endif
 //    #ifdef DEBUG
-        pErr = Itoa((int)guest.vmcb->cs.sel, pErr, 16);
-        print("                                           ");
-        print("gCS=0x");
-        print(pErr);
-        pErr = Itoa((int)guest.vmcb->rip, pErr, 16);
-        print(", gEIP=0x");
-        print(pErr);
     }
     #endif
     guest.vmcb->tlb_control = 0;
@@ -339,10 +330,13 @@ void ProcessVMRunResults()
     {
         case VMEXIT_NPF :	//Paging exception
 asm("xchgw bx,bx\n");
-            guest.vmcb->eventinj.fields.v = true;
-            guest.vmcb->eventinj.fields.ev = true;
-            guest.vmcb->eventinj.fields.type = 3;
-            guest.vmcb->eventinj.fields.vector = 0xe;
+            
+            clrscr();
+            printAt("",0,6);
+            printf("Nested page fault with nested paging enabled\n");
+            printf("Page fault (0x%02X) for address 0x%08X\n",guest.vmcb->exitinfo1,guest.vmcb->exitinfo2);
+            printf("Occurred at 0x%04X:0x%08X\n",guest.vmcb->cs.sel,guest.vmcb->rip);
+            InfiniteLoop(guest.vmcb->exitcode,false);
             if (guest.vmcb->np_enable)
             {
                 guest.vmcb->eventinj.fields.errorcode = 0x0;
@@ -358,17 +352,21 @@ asm("xchgw bx,bx\n");
             }
 //            else
 //                InfiniteLoop(guest.vmcb->exitcode);
+            guest.vmcb->eventinj.fields.v = true;
+            guest.vmcb->eventinj.fields.ev = true;
+            guest.vmcb->eventinj.fields.type = 3;
+            guest.vmcb->eventinj.fields.vector = 0xe;
             break;
         case VMEXIT_EXCEPTION_PF:
 asm("xchgw bx,bx\n");
             if (guest.vmcb->np_enable)
             {
                 //Nested paging is enabled so we should never get here.
-                InfiniteLoop(guest.vmcb->exitcode);
+                InfiniteLoop(guest.vmcb->exitcode,false);
             }
             else
             {
-                InfiniteLoop(guest.vmcb->exitcode);
+                InfiniteLoop(guest.vmcb->exitcode,false);
                 //We set up shadow pages for the entire guest memory so there should never be a guest #PF
                 //If there is one though, reflect it back!
                 guest.vmcb->eventinj.fields.v = 1;
@@ -382,22 +380,9 @@ asm("xchgw bx,bx\n");
             break;
         case VMEXIT_SWINT: 
         //case VMEXIT_INTR:
-/*            if (IntNo!=0x1c && IntNo!=0x16 && IntNo!=0x10 && IntNo!=0x6d)
-            {
-                printd("SWInt=0x");
-                printd(Itoa(IntNo,pErr,16));
-                printd(", AX=0x");
-                printd(Itoa((guest.vmcb->rax & 0xFFFF),pErr,16));
-                printd(", CS:EIP=");
-                printd(Itoa((guest.vmcb->cs.sel & 0xFFFF),pErr,16));
-                printd(":");
-                printd(Itoa((guest.vmcb->rip & 0xFFFFFFFF),pErr,16));
-                printd("\n\r");
-            }
-*/            if (IntNo==0x15 /*|| IntNo==0x13*/)
+            if (IntNo==0x15 /*|| IntNo==0x13*/)
             {
                 HandleRealModeSWInterrupt(IntNo);
-//asm("xchgw bx,bx\n");
             }
             else
             {
@@ -409,16 +394,6 @@ asm("xchgw bx,bx\n");
                     printd(" - Injecting\n");
                 }
 #endif
-/*                if (IntNo == 0x10)
-                {
-                    printd("INT");
-                    printd(Itoa(IntNo,pErr,16));
-                    printd(" @ 0x");
-                    printd(Itoa((int)guest.vmcb->cs.sel, pErr, 16));
-                    printd(":0x");
-                    printd(Itoa((int)guest.vmcb->rip, pErr, 16));
-                    printd("\n");
-                }*/
                 guest.vmcb->eventinj.fields.v = 1;
                 guest.vmcb->eventinj.fields.ev = 0;
                 guest.vmcb->eventinj.fields.errorcode = 0;
@@ -522,7 +497,7 @@ asm("xchgw bx,bx\n");
         case VMEXIT_SHUTDOWN:
 asm("xchgw bx,bx\n");
             print("VM Shutdown State Entered ... locking up now!!!");
-            InfiniteLoop(guest.vmcb->exitcode);
+            InfiniteLoop(guest.vmcb->exitcode,false);
             break;
         case VMEXIT_EXCEPTION_DE: case VMEXIT_EXCEPTION_DB: case VMEXIT_EXCEPTION_NMI: case VMEXIT_EXCEPTION_BP: case VMEXIT_EXCEPTION_OF: case VMEXIT_EXCEPTION_BR:
              case VMEXIT_EXCEPTION_UD: case VMEXIT_EXCEPTION_NM: case VMEXIT_EXCEPTION_DF: case VMEXIT_EXCEPTION_09: case VMEXIT_EXCEPTION_TS: 
@@ -598,13 +573,13 @@ asm("xchgw bx,bx\n");
             if ( (guest.vmcb->rflags & 0x200) != 0x200)
             {
                 printAt("VISOR: HLT called with IF=0\0",0,1);
-                InfiniteLoop(guest.vmcb->exitcode);
+                InfiniteLoop(guest.vmcb->exitcode,false);
             }
             guest.vmcb->rip = guest.vmcb->nextrip;
             break;
         case VMEXIT_NMI:
             printAt("     VISOR: NMI intercepted, something broke!!!",0,1);
-            InfiniteLoop(guest.vmcb->exitcode);
+            InfiniteLoop(guest.vmcb->exitcode,false);
         case VMEXIT_CPUID:
             //We only want to fulfill requests where EAX=1
             if (guest.vmcb->rax == 0x0)
@@ -625,7 +600,7 @@ asm("xchgw bx,bx\n");
             printAt("Unhandled Intercept: ",0,7);
             pErr = Itoa(guest.vmcb->exitcode, pErr, 16);
             print(pErr);
-            InfiniteLoop(guest.vmcb->exitcode);
+            InfiniteLoop(guest.vmcb->exitcode,false);
             break;
     }
 //    asm("STGI\n");
@@ -709,33 +684,38 @@ void DoVisor()
     
 }
 
-void InfiniteLoop(int InterceptCode)
+void InfiniteLoop(int InterceptCode, bool takeADump)
 {
 char *pErr = "                    \0";
 int cnt = 0;
 
 	gInterceptCode = InterceptCode;
-        printAt("In the toilet (aka infinite loop) from intercept code: 0x",0,21);
-	pErr = Itoa(InterceptCode, pErr, 16);
-	print(pErr);
-	printAt("CR0 value: ",0,17);
-	pErr = Itoa(guest.vmcb->cr0, pErr, 16);
-	print(pErr);
-	print(", CR3 value: ");
-	pErr = Itoa(guest.vmcb->cr3, pErr, 16);
-	print(pErr);
+        printAt("",0,1);
+        printf("In the toilet (aka infinite loop) from intercept code: 0x%08X\n",InterceptCode);
+	printf("CR0: 0x%08X, CR3: 0x%08X\n",guest.vmcb->cr0,guest.vmcb->cr3);
+        printf("DS: 0x%04X (0x%04X), ES: 0x%04X (0x%04X), FS: 0x%04X (0x%04X), GS: 0x%04X (0x%04X), SS: 0x%04X (0x%04X)\n",
+                guest.vmcb->ds.sel, guest.vmcb->ds.base,
+                guest.vmcb->es.sel, guest.vmcb->es.base,
+                guest.vmcb->fs.sel, guest.vmcb->fs.base,
+                guest.vmcb->gs.sel, guest.vmcb->gs.base,
+                guest.vmcb->ss.sel, guest.vmcb->ss.base);
+        
+        printf("EAX: 0x%08X, EBX: 0x%08X, ECX: 0x%08X, EDX: 0x%08X\n",
+                guest.vmcb->rax,GuestRegisters[0],GuestRegisters[1],GuestRegisters[2]);
+        printf("ESI: 0x%08X, EDI: 0x%08X, EBP: 0x%08X, ESP: 0x%08X\n",
+                GuestRegisters[3],GuestRegisters[4],GuestRegisters[5],guest.vmcb->rsp);
         printAt("Bytes at CS:IP: ",0,18);
-        for (cnt=0;cnt<20;cnt++)
+        for (cnt=0;cnt<25;cnt++)
         {
-            pErr = Itoa(GetMemB( (guest.vmcb->cs.sel | guest.vmcb->rip) + cnt,true), pErr, 16);
-            print(pErr);
-            print(" ");
+            printf("0x%02X ", GetMemB(getLinearCSEIP() + cnt,true));
         }
-        printAt("A20 Value: ",0,19);
+        printAt("A20 Value: ",0,20);
         pErr = Itoa(inb(0x92), pErr, 16);
         print(pErr);
         HostScancode = 0;
-        DumpVMCB();
+        
+        if (takeADump)
+            DumpVMCB();
         
         InfiniteLoop1:
 	goto InfiniteLoop1;
@@ -783,6 +763,8 @@ void SetupHostPaging()
 
 void RelocateMyself()
 {
+    uint32_t loc;
+    
     CopyMemory(0x800000,vhost.CodeBase, 0x1FFFF);
     DESCR_SEG *item = (DESCR_SEG*)(DWORD)(vhost.CodeBase + vhost.GDTOffset);
     setup_GDT32_entry_gcc(item+10, vhost.CodeBase, 0xFFFFFFFF, ACS_CODE, 0X4F);
@@ -896,7 +878,7 @@ void PrintHostInformation()
     
     
     printAt("Total Host Mem: 0x",0,lineNo++);
-    DWORD lTotal = (vhost.CodeBase + vhost.e820MemMap + 1024) - vhost.CodeBase;
+    DWORD lTotal = vhost.endOfHostMemory;
     pErr = Itoa(lTotal, pErr, 16);
     print(pErr);
     print(" (");

@@ -821,15 +821,17 @@ lblReturn: asm("nop\n");
 
 void InitializeGuest()
 {
+    DWORD hostCR0;
     //The shadow CR0 represents what the guest thinks the CR0 is, so no paging when we first boot
     guest.guestViewCR0 = 0x00010; //WP bit and extension bit sest
     guest.requestedCR3 = 0x0;
-
+    asm("mov eax, CR0\n":"=A"(hostCR0));
+    guest.guestViewCR0 = hostCR0 & 0x7FFFFFFE;
     //Configure the vmcb
     guest.vmcb = (struct vmcb_struct*)vhost.VMCBOffset;  //OFFSET is from DS base
-    guest.vmcb->cr0 = 0x00000000 | guest.guestViewCR0;
-    guest.vmcb->nested_cr3 = 0x7000000; //vhost.CodeBase + vhost.NestedCR3;  //Vid Bios is 0xFFFF bytes
-    guest.nonNestedPagingCR3 = 0x8000000;
+    guest.vmcb->cr0 = guest.guestViewCR0;
+    guest.vmcb->nested_cr3 = 0xA000000; //vhost.CodeBase + vhost.NestedCR3;  //Vid Bios is 0xFFFF bytes
+    guest.nonNestedPagingCR3 = 0xB000000;
     guest.vmcb->cr_intercepts = 0; //CR0_INTERCEPT_WRITE_ENABLE | CR3_INTERCEPT_WRITE_ENABLE; 
     guest.vmcb->exception_intercepts = 0; //INTERCEPT_EXCEPTION_14
     //Currently grabbing SWInt and IOIO so that I can fool EMM386 into thinking it only has 24mb to deal with
@@ -865,12 +867,13 @@ void InitializeGuest()
     guest.vmcb->cr2 = 0x0;
     //Session starts in paged-real mode so we'll point the guest at the nested page tables
     //that we will use later for the real nested paging
-    guest.vmcb->cr3 = guest.vmcb->nested_cr3;
+    guest.vmcb->cr3 = 0; //clr10/07/2017: was guest.vmcb->nested_cr3;
     guest.vmcb->cr4 = 0x0;
     guest.vmcb->rflags = 0x82;
     guest.vmcb->rsp = 0xffd6;
     guest.vmcb->rip = 0x7c00;
     guest.vmcb->rax = 0xaa55;
+    asm("mov eax, CR4\n":"=A"(guest.vmcb->cr4));
 }
 
 void SetIOIOPort(int PortNum, bool Value)

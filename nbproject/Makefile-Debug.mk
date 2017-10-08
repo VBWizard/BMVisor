@@ -39,6 +39,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/guest.o \
 	${OBJECTDIR}/src/host.o \
 	${OBJECTDIR}/src/isr_wrapper.o \
+	${OBJECTDIR}/src/memmap.o \
 	${OBJECTDIR}/src/pmode.o \
 	${OBJECTDIR}/src/pmode_screen.o \
 	${OBJECTDIR}/src/utility.o \
@@ -91,6 +92,11 @@ ${OBJECTDIR}/src/host.o: src/host.c
 ${OBJECTDIR}/src/isr_wrapper.o: src/isr_wrapper.asm 
 	${MKDIR} -p ${OBJECTDIR}/src
 	$(AS) $(ASFLAGS) -g -o ${OBJECTDIR}/src/isr_wrapper.o src/isr_wrapper.asm
+
+${OBJECTDIR}/src/memmap.o: src/memmap.c 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.c) -g -Iinclude -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/memmap.o src/memmap.c
 
 ${OBJECTDIR}/src/pmode.o: src/pmode.c 
 	${MKDIR} -p ${OBJECTDIR}/src

@@ -3,7 +3,7 @@ export hdimage=/home/yogi/src/vmmeow/diskimage.img
 export VisorSector=15   #7680 or 0x1E00
 export Visorimage=./dist/Debug/GNU-Linux-x86/bmvisor
 #echo Writing to disk
-dd conv=notrunc if=$Visorimage of=$hdimage bs=512 seek=$VisorSector
+#dd conv=notrunc if=$Visorimage of=$hdimage bs=512 seek=$VisorSector
 #dd conv=notrunc if=$Visorimage of=$final_hdimage bs=512 seek=$VisorSector
 gcc -g -m32 -O0 -ffreestanding -D__BOOT_FROM_HD__ -D __GCC__ $1 -masm=intel -c -g -Wa,-a,-ad,-an,-ah,-L -c `ls -b *.c`  > visor.lst
 objdump -D -b binary -mi386 -Maddr32,data32 dist/Debug/GNU-Linux-x86/bmvisor > all.asm

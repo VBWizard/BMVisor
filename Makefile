@@ -57,7 +57,7 @@ build: .build-post
 
 .build-post: .build-impl
 # Add your post 'build' code here...
-	gksudo ./do_gof
+	./do_gof
 
 .build-impl:
 

@@ -10,7 +10,7 @@ __asm__("jmp main");
 #include "pmode_screen.h"
 #include "guest.h"
 #include "host.h"
-
+#include "memmap.h"
 
 DWORD fatalErrorNum = 0;
 
@@ -21,11 +21,18 @@ void main(void)
     setHostSegReg(ES, SELECTOR_ALL_MEM);
     setHostSegReg(GS, SELECTOR_VISOR_DATA);
 
-    vhost.memSize = 0x15000000;
-    guest.memSize = 64*1024*1024; //0x3000000;
+    vhost.memSize = getPhysMemTotal(INT15_MEMORY_MAP<<4);
+    printf("Host physical Memory = %u\n",vhost.memSize);
+    guest.memSize = 128*1024*1024; //0x3000000;
     guest.GuestMemStartAddress = 0x0;
-    //clr 09/25/2017: Changed from commented to 0x10000000
-    vhost.CodeBase = 0x10000000; //guest.memSize + guest.GuestMemStartAddress + (1024*1024*1);    
+    //clr 10/07/2017: Calculate codebase as the max mem size - the size of the host, unless more than 4gb of mem is present
+    //in which case put it at the top of the first 4 gigs
+    //WARNING: You should make sure where you want to put it is ok with the memory map, but we'll do that later
+    if (vhost.memSize > 0xFFFFFFFF)
+        vhost.CodeBase = 0xFF000000;
+    else
+        vhost.CodeBase = (vhost.memSize - vhost.endOfHostMemory) & 0xFF000000; //guest.memSize + guest.GuestMemStartAddress + (1024*1024*1);    
+    vhost.CodeBase = 0x10000000;
     vhost.StackBase = vhost.CodeBase;
     vhost.VMCBOffset = 0x30000;
     vhost.VMCBIoioOffset = vhost.VMCBOffset + sizeof(struct vmcb_struct);
@@ -39,6 +46,7 @@ void main(void)
     vhost.NestedCR3Backup = vhost.NestedCR3 + 0x1000 /*PDE*/ + (guest.memSize / 0x1000) * 4 /*PTE*/;
     vhost.BootSectorSave = vhost.NestedCR3Backup + 0x1000 /*PDE*/ + (guest.memSize / 0x1000) * 4 /*PTE*/;
     vhost.e820MemMap = vhost.BootSectorSave + 0x200;
+    vhost.endOfHostMemory = vhost.e820MemMap + 0x1000;
     
     println("About to enable A20");
     if ( (inb(0x92) & 0x2) != 0x2)
@@ -77,19 +85,19 @@ void main(void)
             print("SVM is available\0");
             break;
             case SVM_NOT_AVAIL:
-            print("SVM is not available on this machine.\0");
+            print(" SVM is not available on this machine.\0");
             FatalError(-1);
             break;
             case SVM_DISABLED_AT_BIOS_NOT_UNLOCKABLE:
-            print("SVM is disabled in the BIOS and is not unlockable\0");
+            print(" SVM is disabled in the BIOS and is not unlockable\0");
             FatalError(-2);
             break;
             case SVM_DISABLED_WITH_KEY:
-            print("SVM is disabled with key\0");
+            print(" SVM is disabled with key\0");
             FatalError(-3);
             break;
             default:
-            print("Unknown error detecting SVM availability\0");
+            print(" Unknown error detecting SVM availability\0");
             FatalError(-4);
             break;
     }

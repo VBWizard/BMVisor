@@ -8,6 +8,7 @@
       <itemPath>include/cross.h</itemPath>
       <itemPath>include/guest.h</itemPath>
       <itemPath>include/host.h</itemPath>
+      <itemPath>include/memmap.h</itemPath>
       <itemPath>include/pmode.h</itemPath>
       <itemPath>include/pmode_screen.h</itemPath>
       <itemPath>include/types.h</itemPath>
@@ -28,6 +29,7 @@
       <itemPath>src/0-visor_main.c</itemPath>
       <itemPath>src/guest.c</itemPath>
       <itemPath>src/host.c</itemPath>
+      <itemPath>src/memmap.c</itemPath>
       <itemPath>src/pmode.c</itemPath>
       <itemPath>src/pmode_screen.c</itemPath>
       <itemPath>src/utility.c</itemPath>
@@ -90,6 +92,8 @@
           <customToolAdditionalDep>--32</customToolAdditionalDep>
         </customTool>
       </item>
+      <item path="include/memmap.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/pmode.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/pmode_screen.h" ex="false" tool="3" flavor2="0">
@@ -115,6 +119,8 @@
       <item path="src/host.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/isr_wrapper.asm" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/memmap.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/pmode.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -157,6 +163,8 @@
       </item>
       <item path="include/isr_wrapper.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/memmap.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/pmode.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/pmode_screen.h" ex="false" tool="3" flavor2="0">
@@ -182,6 +190,8 @@
       <item path="src/host.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/isr_wrapper.asm" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/memmap.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/pmode.c" ex="false" tool="0" flavor2="0">
       </item>

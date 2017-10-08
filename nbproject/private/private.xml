@@ -14,9 +14,8 @@
         </group>
         <group name="OldProjects"/>
         <group name="OSGrp">
+            <file>file:/home/yogi/NetBeansProjects/BMVisor/src/0-visor_main.c</file>
             <file>file:/home/yogi/NetBeansProjects/BMVisor/src/host.c</file>
-            <file>file:/home/yogi/NetBeansProjects/BMVisor/src/guest.c</file>
-            <file>file:/home/yogi/NetBeansProjects/BMVisor/include/vmcb.h</file>
         </group>
     </open-files>
 </project-private>

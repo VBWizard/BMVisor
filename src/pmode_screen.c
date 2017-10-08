@@ -1,5 +1,6 @@
 #include "xen_types.h"
 #include "utility.h"
+#include <stdarg.h>
 
 #define switch_ds 	__asm__("mov eax,0X48\n push ds\n push eax\n pop ds\n");
 #define switch_ds_back __asm__("pop ds");
@@ -158,6 +159,19 @@ void print(char *c)
    // Move the hardware cursor.
    move_cursor();
 } 
+
+int printf(const char *fmt, ...)
+{
+	va_list args;
+	int i;
+        char* buf[500];
+        
+	va_start(args, fmt);
+	i=vsprintf(buf,fmt,args);
+	va_end(args);
+        print((char*)buf);
+	return i;
+}
 
 void movecursor(int locX, int locY)
 {

@@ -42,6 +42,7 @@ struct visor_host
     DWORD memSize;
     DWORD CR0, CR2, CR3;
     DWORD e820MemMap;
+    DWORD endOfHostMemory;
 };
 struct visor_host vhost;
 
